@@ -20,22 +20,25 @@ login_manager.init_app(app)
 
 class User(UserMixin, db.Model):
    id = db.Column(db.Integer, primary_key=True)
-   name = db.Column(db.String, nullable=False)
+   name = db.Column(db.String, nullable=False, unique=True)
    password = db.Column(db.String, nullable=False)
    # フロント側でユーザを識別する
    uuid = db.Column(db.String, nullable=False, unique=True)
    # ユーザが登録された時の時間
    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone('Asia/Tokyo')))
 
-
-@app.route('/register', methods=['POST'])
-def register():
+def get_json():
     # jsonリクエストから値取得
     json = request.get_json()
     if type(json) == list:
         data = json[0]
     else:
         data = json
+    return data
+
+@app.route('/register', methods=['POST'])
+def register():
+    data = get_json()
     username = data['name']
     userpassword = data['password']
     # uuidを生成
@@ -58,3 +61,19 @@ def register():
     except Exception as e:
         db.session.rollback()
         return 'False,' + str(type(e).__name__)
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = get_json()
+    username = data['name']
+    userpassword = data['password']
+
+    user = User.query.filter_by(name=username).first()
+    if user is None:
+        return 'False,userが見つかりません'
+
+    if user.password == userpassword:
+        return 'True'
+    else:
+        return 'False,passwordが違います'
