@@ -100,7 +100,7 @@ def roomcreate():
 
     user = User.query.filter_by(uuid=user_uuid).first()
     if(user==None):
-        return 'False,' + '不正なユーザーです'
+        return 'False,不正なユーザーです'
     else:
         room = Room(
             room_number=room_number,
