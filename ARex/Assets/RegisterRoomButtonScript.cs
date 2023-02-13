@@ -46,6 +46,8 @@ public class RegisterRoomButtonScript : MonoBehaviour
 
     IEnumerator Upload()
     {
+        /// uuidロード
+        var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
         var url = "http://4.241.111.128:3000/api";
         var data = new Data();
         data.name = user_name_str;
@@ -69,8 +71,10 @@ public class RegisterRoomButtonScript : MonoBehaviour
         string judge = arr[0];
         if (judge == "True")
         {
-            string UUID = arr[1];
-            Debug.Log("login successful UUID:" + UUID);
+            /// 登録時にuuidがいるのか？
+            PlayerPrefs.SetString("Useruuid", arr[1]);
+            useruuid = arr[1];
+            Debug.Log("login successful UUID:" + useruuid);
             SceneManager.LoadScene("LoginScene");
         }
         else
