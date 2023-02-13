@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 
-public class LoginButtonScript : MonoBehaviour
+public class RegisterRoomButtonScript : MonoBehaviour
 {
     public TextMeshProUGUI user_name; // Textオブジェクト
     string user_name_str;
@@ -40,15 +40,15 @@ public class LoginButtonScript : MonoBehaviour
     [Serializable]
     private sealed class Data
     {
-        public string name = "none";
-        public string password = "none";
+        public string name = "hitto";
+        public string password = "apex";
     }
 
     IEnumerator Upload()
     {
         /// uuidロード
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
-        var url = "http://4.241.111.128:3000/login";
+        var url = "http://4.241.111.128:3000/register";
         var data = new Data();
         data.name = user_name_str;
         data.password = user_password_str;
@@ -71,11 +71,11 @@ public class LoginButtonScript : MonoBehaviour
         string judge = arr[0];
         if (judge == "True")
         {
-            ///UUIDセーブ
+            /// 登録時にuuidがいるのか？
             PlayerPrefs.SetString("Useruuid", arr[1]);
             useruuid = arr[1];
             Debug.Log("login successful UUID:" + useruuid);
-            SceneManager.LoadScene("RoomListScene");
+            SceneManager.LoadScene("LoginScene");
         }
         else
         {

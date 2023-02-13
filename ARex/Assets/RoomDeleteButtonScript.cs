@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -8,13 +8,9 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 
-public class LoginButtonScript : MonoBehaviour
+public class RoomDeleteButtonScript : MonoBehaviour
 {
-    public TextMeshProUGUI user_name; // Textオブジェクト
-    string user_name_str;
-    public TextMeshProUGUI user_password; // Textオブジェクト
-    string user_password_str;
-    public TextMeshProUGUI error_message; // Textオブジェクト
+    public TextMeshProUGUI error_message; // Text�I�u�W�F�N�g
 
     public void Start()
     {
@@ -22,36 +18,24 @@ public class LoginButtonScript : MonoBehaviour
     }
 
 
-    public void OnClick()
+    public void OnClickRoomDeleteButton()
     {
-        user_name = user_name.GetComponent<TextMeshProUGUI>();
-        user_name_str = user_name.text;
-        ///Replace("​", "")の一つ目の""内にはゼロ幅スペース"%E2%80%8B"が入っています。
-        user_name_str = user_name_str.Replace("​", "");
-        user_password = user_password.GetComponent<TextMeshProUGUI>();
-        user_password_str = user_password.text;
-        ///Replace("​", "")の一つ目の""内にはゼロ幅スペース"%E2%80%8B"が入っています。
-        user_password_str = user_password_str.Replace("​", "");
-        ///Debug.Log(user_name_str);
-        ///Debug.Log(user_password_str);
         StartCoroutine(Upload());
     }
 
     [Serializable]
     private sealed class Data
     {
-        public string name = "none";
-        public string password = "none";
+        public string user_uuid = "none";
     }
 
     IEnumerator Upload()
     {
-        /// uuidロード
+        /// uuid���[�h
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
-        var url = "http://4.241.111.128:3000/login";
+        var url = "http://4.241.111.128:3000/roomdelete";
         var data = new Data();
-        data.name = user_name_str;
-        data.password = user_password_str;
+        data.user_uuid = useruuid;
         var json = JsonUtility.ToJson(data);
         var postData = Encoding.UTF8.GetBytes(json);
 
@@ -71,10 +55,8 @@ public class LoginButtonScript : MonoBehaviour
         string judge = arr[0];
         if (judge == "True")
         {
-            ///UUIDセーブ
-            PlayerPrefs.SetString("Useruuid", arr[1]);
-            useruuid = arr[1];
-            Debug.Log("login successful UUID:" + useruuid);
+            Debug.Log("success!");
+            Debug.Log("UUID:" + useruuid);
             SceneManager.LoadScene("RoomListScene");
         }
         else

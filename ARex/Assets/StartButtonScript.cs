@@ -7,6 +7,8 @@ public class StartButtonScript : MonoBehaviour
 {
     public void OnClickStartButton()
     {
+        PlayerPrefs.DeleteAll();
+        Debug.Log("del all PlayerPrefs");
         SceneManager.LoadScene("LoginScene");
     }
 }

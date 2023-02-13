@@ -7,10 +7,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
-public class JoinRoomButtonScript : MonoBehaviour
+
+public class LeaveButtonScript : MonoBehaviour
 {
-    public TextMeshProUGUI room_number; // Textオブジェクト
-    string room_number_str;
 
     public void Start()
     {
@@ -18,13 +17,8 @@ public class JoinRoomButtonScript : MonoBehaviour
     }
 
 
-    public void OnClickJoinRoomButton()
+    public void OnClickLeaveButton()
     {
-        room_number = room_number.GetComponent<TextMeshProUGUI>();
-        room_number_str = room_number.text;
-        ///Replace("​", "")の一つ目の""内にはゼロ幅スペース"%E2%80%8B"が入っています。
-        room_number_str = room_number_str.Replace("​", "");
-        ///Debug.Log(room_number_str);
         StartCoroutine(Upload());
     }
 
@@ -37,17 +31,15 @@ public class JoinRoomButtonScript : MonoBehaviour
     private sealed class Data
     {
         public string user_uuid = "none";
-        public string room_number = "none";
     }
 
     IEnumerator Upload()
     {
         /// uuidロード
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
-        var url = "http://4.241.111.128:3000/roomexist";
+        var url = "http://4.241.111.128:3000/roomleave";
         var data = new Data();
         data.user_uuid = useruuid;
-        data.room_number = room_number_str;
         var json = JsonUtility.ToJson(data);
         var postData = Encoding.UTF8.GetBytes(json);
 
@@ -61,19 +53,6 @@ public class JoinRoomButtonScript : MonoBehaviour
 
         yield return request.SendWebRequest();
 
-        Debug.Log(request.downloadHandler.text);
-
-        string judge = request.downloadHandler.text;
-        if (judge == "True")
-        {
-            Debug.Log("Match!!");
-            SceneManager.LoadScene("MemberListScene");
-        }
-        else
-        {
-            Debug.Log("NoMatch ; ;");
-            SceneManager.LoadScene("NoMatchScene");
-        }
-
+        SceneManager.LoadScene("RoomListScene");
     }
 }

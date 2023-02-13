@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/TitleScene.unity
     guid: a9638f36337a4114c8679e108a84e969
   - enabled: 1
-    path: Assets/Scenes/MenberListScene.unity
+    path: Assets/Scenes/MemberListScene.unity
     guid: 49f635af11ee1ae4d930d6b1a2293f3d
   - enabled: 1
     path: Assets/Scenes/NoMatchScene.unity
@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RoomJoinScene.unity
     guid: 22d713013d8d65140a0665ad34456389
+  - enabled: 1
+    path: Assets/Scenes/RegisterScene.unity
+    guid: d2d8a9a58bd9540449cd22f5ff8ca995
   - enabled: 1
     path: Assets/Scenes/RoomCreateScene.unity
     guid: 012c455c9294373429848480a2e318fe
