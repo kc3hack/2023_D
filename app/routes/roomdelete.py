@@ -12,15 +12,20 @@ def roomdelete():
     # jsonリクエストから値取得
     data = get_json()
 
-    room_number = data['room_number']
     user_uuid = data['user_uuid']
 
     user = User.query.filter_by(uuid=user_uuid).first()
-    room = Room.query.filter_by(room_number=room_number).first()
 
-    # オーナーか判断
-    if (room.user_id == user.id):
-
+    if(user==None):
+        return 'False,NOT found user'
+    
+    room=user.room
+    
+    if(room==None):
+        return 'False,you are NOT owner'
+    
+    #オーナーである場合
+    else:
         # エラーが出たらロールバック
         try:
             # dbからroomを削除
@@ -30,3 +35,5 @@ def roomdelete():
         except Exception as e:
             db.session.rollback()
             return 'False,' + str(type(e).__name__)
+        
+        
