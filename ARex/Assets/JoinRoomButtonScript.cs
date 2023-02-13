@@ -1,21 +1,77 @@
+ï»¿using System;
+using System.Text;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
+using TMPro;
 public class JoinRoomButtonScript : MonoBehaviour
 {
+    public TextMeshProUGUI room_number; // Textã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    string room_number_str;
+
+    public void Start()
+    {
+
+    }
+
+
     public void OnClickJoinRoomButton()
     {
-        /// «roomid‚ª‘¶İ‚·‚ê‚Î•Ô‚è’l‚ğŒ©‚é‚ç‚µ‚¢(–¢
-        if (true)
+        room_number = room_number.GetComponent<TextMeshProUGUI>();
+        room_number_str = room_number.text;
+        ///Replace("â€‹", "")ã®ä¸€ã¤ç›®ã®""å†…ã«ã¯ã‚¼ãƒ­å¹…ã‚¹ãƒšãƒ¼ã‚¹"%E2%80%8B"ãŒå…¥ã£ã¦ã„ã¾ã™ã€‚
+        room_number_str = room_number_str.Replace("â€‹", "");
+        ///Debug.Log(room_number_str);
+        StartCoroutine(Upload());
+    }
+
+
+
+
+
+
+    [Serializable]
+    private sealed class Data
+    {
+        public string room_number = "none";
+    }
+
+    IEnumerator Upload()
+    {
+        /// uuidãƒ­ãƒ¼ãƒ‰
+        var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
+        var url = "http://4.241.111.128:3000/roomexist";
+        var data = new Data();
+        data.room_number = room_number_str;
+        var json = JsonUtility.ToJson(data);
+        var postData = Encoding.UTF8.GetBytes(json);
+
+        using var request = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST)
         {
-            SceneManager.LoadScene("MenberListScene");
-        } else
+            uploadHandler = new UploadHandlerRaw(postData),
+            downloadHandler = new DownloadHandlerBuffer()
+        };
+
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        yield return request.SendWebRequest();
+
+        Debug.Log(request.downloadHandler.text);
+
+        string judge = request.downloadHandler.text;
+        if (judge == "True")
         {
-#pragma warning disable CS0162 // “’B‚Å‚«‚È‚¢ƒR[ƒh‚ªŒŸo‚³‚ê‚Ü‚µ‚½
-            SceneManager.LoadScene("NoMatchScene");
-#pragma warning restore CS0162 // “’B‚Å‚«‚È‚¢ƒR[ƒh‚ªŒŸo‚³‚ê‚Ü‚µ‚½
+            Debug.Log("Match!!");
+            SceneManager.LoadScene("MemberListScene");
         }
+        else
+        {
+            Debug.Log("NoMatch ; ;");
+            SceneManager.LoadScene("NoMatchScene");
+        }
+
     }
 }

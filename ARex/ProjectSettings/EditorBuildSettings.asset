@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/TitleScene.unity
     guid: a9638f36337a4114c8679e108a84e969
   - enabled: 1
-    path: Assets/Scenes/MenberListScene.unity
+    path: Assets/Scenes/MemberListScene.unity
     guid: 49f635af11ee1ae4d930d6b1a2293f3d
   - enabled: 1
     path: Assets/Scenes/NoMatchScene.unity

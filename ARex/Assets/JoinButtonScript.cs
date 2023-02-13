@@ -9,7 +9,7 @@ public class JoinButtonScript : MonoBehaviour
     {
         ///uuidƒ[ƒh
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
-        Debug.Log(useruuid);
+        Debug.Log("UUID:" + useruuid);
         SceneManager.LoadScene("RoomJoinScene");
     }
 }
