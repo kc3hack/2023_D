@@ -77,7 +77,7 @@ def login():
         return 'False,userが見つかりません'
 
     if user.password == userpassword:
-        return 'True'
+        return 'True,' + user.uuid
     else:
         return 'False,passwordが違います'
 
@@ -117,3 +117,64 @@ def roomcreate():
         except Exception as e:
             db.session.rollback()
             return 'False,' + str(type(e).__name__)
+
+
+
+@app.route('/roomexist',methods=['POST'])
+def roomexist():
+     # jsonリクエストから値取得
+    data = get_json()
+    
+    room_number = data['room_number'] 
+    user_uuid = data['user_uuid']
+    
+    
+    user = User.query.filter_by(uuid=user_uuid).first()
+    room = Room.query.filter_by(room_number=room_number).first()
+    
+    if(room==None):
+        return 'False,そのroomは存在しません'
+    
+    elif(user==None):
+        return 'False,不正なユーザーです'
+    
+    else:
+        return 'True,そのroomは存在しています'
+    
+    
+    
+@app.route('/roomdelete',methods=['POST'])
+def roomdelete():
+    # jsonリクエストから値取得
+    data = get_json()
+    
+    room_number = data['room_number'] 
+    user_uuid = data['user_uuid']
+    
+    
+    user = User.query.filter_by(uuid=user_uuid).first()
+    room = Room.query.filter_by(room_number=room_number).first()
+    
+    #オーナーか判断
+    if(room.user_id==user.id):
+        
+        
+         # エラーが出たらロールバック
+        try:
+            # dbからroomを削除
+            db.session.delete(room)
+            db.session.commit()
+            return 'True'
+        except Exception as e:
+            db.session.rollback()
+            return 'False,' + str(type(e).__name__)
+    
+    else:
+        return 'False,オーナーではありません'
+    
+    
+    
+        
+
+        
+    
