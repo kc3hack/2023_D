@@ -3,10 +3,10 @@ from datetime import datetime
 
 import pytz
 
-class Room(db.Model):
+class RoomMember(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    room_number = db.Column(db.Integer, nullable=False, unique=True)
+    room_id = db.Column(db.Integer, db.ForeignKey("room.id"), nullable=False)
+    room = db.relationship("Room", back_populates="room_member")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone('Asia/Tokyo')))
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, unique=True)
-    user = db.relationship("User", back_populates="room")
-    room_member = db.relationship("RoomMember", uselist=True, back_populates="room", cascade="all, delete, delete-orphan")
+    user = db.relationship("User", back_populates="room_member")
