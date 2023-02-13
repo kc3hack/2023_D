@@ -37,8 +37,8 @@ public class CreateRoomButtonScript : MonoBehaviour
     [Serializable]
     private sealed class Data
     {
-        public string room_number = "none";
         public string user_uuid = "none";
+        public string room_number = "none";
     }
 
     IEnumerator Upload()
