@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 15401398}
   - component: {fileID: 15401397}
   m_Layer: 5
-  m_Name: InputField (TMP)
+  m_Name: NameInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1631,7 +1631,7 @@ GameObject:
   - component: {fileID: 1793530874}
   - component: {fileID: 1793530873}
   m_Layer: 5
-  m_Name: InputField (TMP)
+  m_Name: PasswordInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1794,4 +1794,3 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1793530871}
   m_CullTransparentMesh: 1
-  
