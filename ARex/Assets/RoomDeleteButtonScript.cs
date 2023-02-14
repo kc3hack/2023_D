@@ -55,7 +55,7 @@ public class RoomDeleteButtonScript : MonoBehaviour
         string judge = arr[0];
         if (judge == "True")
         {
-            Debug.Log("success!");
+            Debug.Log("room del success!");
             Debug.Log("UUID:" + useruuid);
             SceneManager.LoadScene("RoomListScene");
         }

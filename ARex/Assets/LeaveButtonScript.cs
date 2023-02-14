@@ -37,7 +37,7 @@ public class LeaveButtonScript : MonoBehaviour
     {
         /// uuidロード
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
-        var url = "http://4.241.111.128:3000/roomleave";
+        var url = "http://itoho.ddns.net:5000/roomleave";
         var data = new Data();
         data.user_uuid = useruuid;
         var json = JsonUtility.ToJson(data);

@@ -44,7 +44,7 @@ public class JoinRoomButtonScript : MonoBehaviour
     {
         /// uuidロード
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
-        var url = "http://4.241.111.128:3000/roomexist";
+        var url = "http://itoho.ddns.net:5000/roomexist";
         var data = new Data();
         data.user_uuid = useruuid;
         data.room_number = room_number_str;
