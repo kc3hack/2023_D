@@ -9,4 +9,4 @@ class Room(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone('Asia/Tokyo')))
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, unique=True)
     user = db.relationship("User", back_populates="room")
-    room_member = db.relationship("RoomMember", uselist=True, back_populates="room", cascade="all, delete, delete-orphan")
+    room_members = db.relationship("RoomMember", uselist=True, back_populates="room", cascade="all, delete, delete-orphan")

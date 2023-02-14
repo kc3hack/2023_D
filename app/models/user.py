@@ -14,6 +14,6 @@ class User(UserMixin, db.Model):
     room = db.relationship("Room", uselist=False, back_populates="user", cascade="all, delete, delete-orphan")
     room_member = db.relationship("RoomMember", uselist=False, back_populates="user", cascade="all, delete, delete-orphan")
     pin = db.relationship("Pin", uselist=False, back_populates="user", cascade="all, delete, delete-orphan")
-    
+    reactions = db.relationship("Reaction",uselist=True,back_populates="user",cascade="all, delete, delete-orphan")
 
 
