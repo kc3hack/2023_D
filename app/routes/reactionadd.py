@@ -35,6 +35,11 @@ def reactionadd():
     if(pin==None):
         return 'False,  NOT found pin'
     
+  
+    content_list = ['ok','no','unable','stop']  
+    if(content not in content_list):
+        return 'False, NOT found DEFAULT reaction'
+    
     else:
         reaction = Reaction(
             user_id = user.id,

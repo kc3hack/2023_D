@@ -13,9 +13,9 @@ def login():
 
     user = User.query.filter_by(name=username).first()
     if user is None:
-        return 'False,userが見つかりません'
+        return 'False,NOT found user'
 
     if user.password == userpassword:
         return 'True,' + user.uuid
     else:
-        return 'False,passwordが違います'
+        return 'False, INCORRECT password'
