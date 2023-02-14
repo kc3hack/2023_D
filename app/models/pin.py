@@ -15,3 +15,4 @@ class Pin(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, unique=True)
     user = db.relationship("User", back_populates="pin")
+    reactions = db.relationship("Reaction",uselist=True,back_populates="pin",cascade="all, delete, delete-orphan")
