@@ -291,7 +291,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0.42352942, g: 0.8666667, b: 0.8862745, a: 0.392}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -506,6 +506,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   span: 1
   room_number: {fileID: 662654165}
+  error_message: {fileID: 929744981}
   content_: {fileID: 452434002}
   item_prefab_: {fileID: 586789995988933198, guid: b3f988595261ceb48aef9cb8d72ee0cd, type: 3}
 --- !u!1 &236829699
@@ -1016,7 +1017,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000026092888}
+  m_AnchoredPosition: {x: 0, y: 0.0000017285347}
   m_SizeDelta: {x: 0, y: 200}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &452434003
@@ -1981,7 +1982,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: error
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3529,7 +3530,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3862345872158935028, guid: b3f988595261ceb48aef9cb8d72ee0cd, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 183
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 3862345872158935028, guid: b3f988595261ceb48aef9cb8d72ee0cd, type: 3}
       propertyPath: m_SizeDelta.y
@@ -3581,6 +3582,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3862345872158935028, guid: b3f988595261ceb48aef9cb8d72ee0cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8075583890421233705, guid: b3f988595261ceb48aef9cb8d72ee0cd, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8075583890421233705, guid: b3f988595261ceb48aef9cb8d72ee0cd, type: 3}
+      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

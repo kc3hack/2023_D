@@ -13,6 +13,7 @@ public class RoomPollingScript : MonoBehaviour
 {
     public float span = 1f; // 何秒おきに実行するか
     public TextMeshProUGUI room_number; // Textオブジェクト
+    public TextMeshProUGUI error_message; // Textオブジェクト
     // メンバー表示用
     public RectTransform content_;
     public GameObject item_prefab_;
@@ -27,14 +28,17 @@ public class RoomPollingScript : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        error_message = error_message.GetComponent<TextMeshProUGUI>();
         // 1秒おきにループ
         while (true)
         {
+            // ループ処理
             yield return new WaitForSeconds(span);
             Debug.LogFormat("{0}秒経過", span);
             Debug.Log("api開始");
-
-            /// uuidロード
+            
+            // リクエスト作成
+            // uuidロード
             var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
             var url = "http://itoho.ddns.net:5000/roompolling";
             var data = new Data();
@@ -104,14 +108,19 @@ public class RoomPollingScript : MonoBehaviour
                 }
                 else
                 {
+                    // エラー処理
                     string error = arr[1];
+                    error_message.text = error;
                     Debug.Log("error:" + error);
-                    SceneManager.LoadScene("RoomListScene");
+                    // SceneManager.LoadScene("RoomListScene");
                 }
             }
             catch
             {
-                Debug.Log("error");
+                // エラー処理
+                string error = "invalid return value";
+                error_message.text = error;
+                Debug.Log("error:" + error);
             }
 
 
