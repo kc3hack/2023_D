@@ -40,15 +40,15 @@ public class RegisterRoomButtonScript : MonoBehaviour
     [Serializable]
     private sealed class Data
     {
-        public string name = "hitto";
-        public string password = "apex";
+        public string name = "none";
+        public string password = "none";
     }
 
     IEnumerator Upload()
     {
         /// uuidロード
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
-        var url = "http://4.241.111.128:3000/register";
+        var url = "http://itoho.ddns.net:5000/register";
         var data = new Data();
         data.name = user_name_str;
         data.password = user_password_str;

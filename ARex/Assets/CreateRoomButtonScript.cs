@@ -45,7 +45,7 @@ public class CreateRoomButtonScript : MonoBehaviour
     {
         /// uuidロード
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
-        var url = "http://4.241.111.128:3000/roomcreate";
+        var url = "http://itoho.ddns.net:5000/roomcreate";
         var data = new Data();
         data.room_number = room_number_str;
         data.user_uuid = useruuid;
