@@ -7,12 +7,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class RoomPollingScript : MonoBehaviour
 {
-    public float span = 1f;
-    public TextMeshProUGUI room_number; // TextƒIƒuƒWƒFƒNƒg
+    public float span = 1f; // ä½•ç§’ãŠãã«å®Ÿè¡Œã™ã‚‹ã‹
+    public TextMeshProUGUI room_number; // Textã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    // ãƒ¡ãƒ³ãƒãƒ¼è¡¨ç¤ºç”¨
+    public RectTransform content_;
+    public GameObject item_prefab_;
 
+    // json data
     [Serializable]
     private sealed class Data
     {
@@ -22,13 +27,14 @@ public class RoomPollingScript : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        // 1ç§’ãŠãã«ãƒ«ãƒ¼ãƒ—
         while (true)
         {
             yield return new WaitForSeconds(span);
-            Debug.LogFormat("{0}•bŒo‰ß", span);
-            Debug.Log("apiŠJn");
+            Debug.LogFormat("{0}ç§’çµŒé", span);
+            Debug.Log("apié–‹å§‹");
 
-            /// uuidƒ[ƒh
+            /// uuidãƒ­ãƒ¼ãƒ‰
             var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
             var url = "http://itoho.ddns.net:5000/roompolling";
             var data = new Data();
@@ -44,29 +50,57 @@ public class RoomPollingScript : MonoBehaviour
 
             request.SetRequestHeader("Content-Type", "application/json");
             request.timeout = 1;
-
+            
+            // ãƒªã‚¯ã‚¨ã‚¹ãƒˆé€ä¿¡
             yield return request.SendWebRequest();
 
+            // ãƒ¬ã‚¹ãƒãƒ³ã‚¹å—ä¿¡
             Debug.Log(request.downloadHandler.text);
+            // ãƒ¬ã‚¹ãƒãƒ³ã‚¹ã‚’å‡¦ç†
             try
             {
+                // ãƒ¬ã‚¹ãƒãƒ³ã‚¹ã‚’ãƒ‘ãƒ¼ã‚¹
                 string[] arr = request.downloadHandler.text.Split(',');
+                // True or False ã‚’ judge ã«æ ¼ç´
                 string judge = arr[0];
-                ///gTrue,Room_number,ƒƒ“ƒo[‚Ì”,ƒƒ“ƒo[1‚Ì–¼‘O,ƒƒ“ƒo[2‚Ì–¼‘O......(ƒzƒXƒg‚ª1”Ôã‚É‚È‚é‚æ‚¤•À‚Ñ‘Ö‚¦‚é)
-                ///gFalse,ƒGƒ‰[ƒƒbƒZ[ƒWhiFalse•”‰®‘Şoj
 
+                ///â€œTrue,éƒ¨å±‹ç•ªå·,ãƒ¡ãƒ³ãƒãƒ¼ã®æ•°,ãƒ¡ãƒ³ãƒãƒ¼1(ãƒ›ã‚¹ãƒˆ),ãƒ¡ãƒ³ãƒãƒ¼2(ãƒ¡ãƒ³ãƒãƒ¼)â€ï¼ˆTrueæ™‚éƒ¨å±‹å‚åŠ ï¼‰
+                ///â€œFalse,ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸â€ï¼ˆFalseæ™‚éƒ¨å±‹é€€å‡ºï¼‰??
+
+                // True or False ã§å‡¦ç†ã‚’åˆ†å²
                 if (judge == "True")
                 {
                     ///arr[1] = room_number
-                    ///arr[2] = ƒƒ“ƒo[‚Ì”
-                    ///arr[3] = ƒƒ“ƒo[1(ƒzƒXƒg)
-                    ///arr[4] = ƒƒ“ƒo[2(ƒƒ“ƒo[)
+                    ///arr[2] = ãƒ¡ãƒ³ãƒãƒ¼ã®æ•°
+                    ///arr[3] = ãƒ¡ãƒ³ãƒãƒ¼1(ãƒ›ã‚¹ãƒˆ)
+                    ///arr[4] = ãƒ¡ãƒ³ãƒãƒ¼2(ãƒ¡ãƒ³ãƒãƒ¼)
                     ///(ry
                     Debug.Log("connecting!");
                     Debug.Log("UUID:" + useruuid);
                     room_number = room_number.GetComponent<TextMeshProUGUI>();
                     room_number.text = arr[1];
-                    ///ˆÈ‰º‚Éƒƒ“ƒo[•\¦ˆ—‚ğ‘‚­
+                    ///ä»¥ä¸‹ã«ãƒ¡ãƒ³ãƒãƒ¼è¡¨ç¤ºå‡¦ç†ã‚’æ›¸ã
+                    int mom = Convert.ToInt32(arr[2]);
+
+                    string[] namelist = new string[mom];
+                    for (int i = 0; i < mom; i++)
+                    {
+                        namelist[i] = arr[i + 3];
+                    }
+                    // Contentã®å­è¦ç´ ã‚’å…¨å‰Šé™¤
+                    foreach (Transform child in content_)
+                    {
+                        Destroy(child.gameObject);
+                    }
+                    // ãƒªã‚¹ãƒˆã®è¦ç´ æ•°åˆ†Itemã‚’ç”Ÿæˆ
+                    for (int i = 0; i < mom; i++)
+                    {
+                        // content_ã«item_prefab_ã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
+                        var item = Instantiate(item_prefab_, content_);
+                        // item_objã®å­è¦ç´ ã®Textã‚’å–å¾—
+                        var item_text = item.GetComponentInChildren<Text>();
+                        item_text.text = namelist[i];
+                    }
                 }
                 else
                 {
