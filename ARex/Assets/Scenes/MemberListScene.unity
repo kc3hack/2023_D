@@ -275,6 +275,52 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &229185696
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 229185699}
+  - component: {fileID: 229185700}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &229185699
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229185696}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 208.11893, y: 288.8858, z: 11.062653}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &229185700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229185696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e3c7e166ea4674a9f5ce1ae47c3dc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  span: 1
+  room_number: {fileID: 662654165}
 --- !u!1 &236829699
 GameObject:
   m_ObjectHideFlags: 0
@@ -633,6 +679,7 @@ GameObject:
   - component: {fileID: 463358598}
   - component: {fileID: 463358597}
   - component: {fileID: 463358596}
+  - component: {fileID: 463358599}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -704,7 +751,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 463358597}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 463358599}
+        m_TargetAssemblyTypeName: LeaveButtonScript, Assembly-CSharp
+        m_MethodName: OnClickLeaveButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &463358597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -743,6 +802,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 463358594}
   m_CullTransparentMesh: 1
+--- !u!114 &463358599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463358594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a60535627489cef41a6eb9ab5743b7f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &502119890
 GameObject:
   m_ObjectHideFlags: 0
@@ -1792,10 +1863,10 @@ RectTransform:
   m_Father: {fileID: 1449672888}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0000134077}
-  m_SizeDelta: {x: 0, y: 300}
+  m_AnchoredPosition: {x: 0.0000010728836, y: -0.000015258789}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &929744979
 GameObject:
@@ -2153,7 +2224,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1047530624}
         m_TargetAssemblyTypeName: RoomDeleteButtonScript, Assembly-CSharp
-        m_MethodName: OnClick
+        m_MethodName: OnClickRoomDeleteButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3330,6 +3401,7 @@ GameObject:
   - component: {fileID: 2107595231}
   - component: {fileID: 2107595230}
   - component: {fileID: 2107595229}
+  - component: {fileID: 2107595232}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -3401,7 +3473,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2107595230}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2107595232}
+        m_TargetAssemblyTypeName: EnterButtonScript, Assembly-CSharp
+        m_MethodName: OnClickJoinButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2107595230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3440,6 +3524,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2107595227}
   m_CullTransparentMesh: 1
+--- !u!114 &2107595232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107595227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1879b31a49abed44ba6519cec85eb7d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2120220763
 GameObject:
   m_ObjectHideFlags: 0
@@ -3524,7 +3620,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 696526158}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.61
+  m_Size: 0.6079734
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
