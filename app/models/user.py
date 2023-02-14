@@ -12,7 +12,7 @@ class User(UserMixin, db.Model):
     # ユーザが登録された時の時間
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone('Asia/Tokyo')))
     room = db.relationship("Room", uselist=False, back_populates="user", cascade="all, delete, delete-orphan")
-    room_member = db.relationship("RoomMember", uselist=False, back_populates="user", cascade="all, delete, delete-orphan")
+    room_members = db.relationship("RoomMember", uselist=False, back_populates="user", cascade="all, delete, delete-orphan")
     pin = db.relationship("Pin", uselist=False, back_populates="user", cascade="all, delete, delete-orphan")
     
 
