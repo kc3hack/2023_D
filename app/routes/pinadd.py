@@ -54,7 +54,7 @@ def pinadd():
         # dbにpinを登録
         db.session.add(pin)
         db.session.commit()
-        return 'True'
+        return 'True,' + pin_uuid
     except Exception as e:
         db.session.rollback()
         return 'False,' + str(type(e).__name__)
