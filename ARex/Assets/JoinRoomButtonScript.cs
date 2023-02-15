@@ -7,6 +7,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
+
+// Join Room Script
 public class JoinRoomButtonScript : MonoBehaviour
 {
     public TextMeshProUGUI room_number; // Textオブジェクト
@@ -20,19 +22,17 @@ public class JoinRoomButtonScript : MonoBehaviour
 
     public void OnClickJoinRoomButton()
     {
+        // ルーム番号を取得
+        // ゼロ幅スペースを削除
         room_number = room_number.GetComponent<TextMeshProUGUI>();
         room_number_str = room_number.text;
-        ///Replace("​", "")の一つ目の""内にはゼロ幅スペース"%E2%80%8B"が入っています。
+        // Replace("​", "")の一つ目の""内にはゼロ幅スペース"%E2%80%8B"が入っています。
         room_number_str = room_number_str.Replace("​", "");
-        ///Debug.Log(room_number_str);
         StartCoroutine(Upload());
     }
 
 
-
-
-
-
+    // json data
     [Serializable]
     private sealed class Data
     {
@@ -42,7 +42,7 @@ public class JoinRoomButtonScript : MonoBehaviour
 
     IEnumerator Upload()
     {
-        /// uuidロード
+        // uuidロード
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
         var url = "http://itoho.ddns.net:5000/roomexist";
         var data = new Data();
@@ -59,11 +59,14 @@ public class JoinRoomButtonScript : MonoBehaviour
 
         request.SetRequestHeader("Content-Type", "application/json");
 
+        // リクエスト送信
         yield return request.SendWebRequest();
 
+        // レスポンス取得
         Debug.Log(request.downloadHandler.text);
-
         string judge = request.downloadHandler.text;
+
+        // True or False で処理を分岐
         if (judge == "True")
         {
             Debug.Log("Match!!");

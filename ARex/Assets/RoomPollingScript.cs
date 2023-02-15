@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 
+// pollingスクリプト
 public class RoomPollingScript : MonoBehaviour
 {
     public float span = 1f; // 何秒おきに実行するか
@@ -68,22 +69,22 @@ public class RoomPollingScript : MonoBehaviour
                 // True or False を judge に格納
                 string judge = arr[0];
 
-                ///“True,部屋番号,メンバーの数,メンバー1(ホスト),メンバー2(メンバー)”（True時部屋参加）
-                ///“False,エラーメッセージ”（False時部屋退出）??
+                // “True,部屋番号,メンバーの数,メンバー1(ホスト),メンバー2(メンバー)”（True時部屋参加）
+                // “False,エラーメッセージ”（False時部屋退出）??
 
                 // True or False で処理を分岐
                 if (judge == "True")
                 {
-                    ///arr[1] = room_number
-                    ///arr[2] = メンバーの数
-                    ///arr[3] = メンバー1(ホスト)
-                    ///arr[4] = メンバー2(メンバー)
-                    ///(ry
+                    // arr[1] = room_number
+                    // arr[2] = メンバーの数
+                    // arr[3] = メンバー1(ホスト)
+                    // arr[4] = メンバー2(メンバー)
+                    // (ry
                     Debug.Log("connecting!");
                     Debug.Log("UUID:" + useruuid);
                     room_number = room_number.GetComponent<TextMeshProUGUI>();
                     room_number.text = arr[1];
-                    ///以下にメンバー表示処理を書く
+                    // 以下にメンバー表示処理を書く
                     int mom = Convert.ToInt32(arr[2]);
 
                     string[] namelist = new string[mom];
