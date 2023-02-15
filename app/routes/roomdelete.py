@@ -17,12 +17,12 @@ def roomdelete():
     user = User.query.filter_by(uuid=user_uuid).first()
 
     if(user==None):
-        return 'False,NOT found user'
+        return 'False, NOT found user'
     
     room=user.room
     
     if(room==None):
-        return 'False,you are NOT owner'
+        return 'False, you are NOT owner'
     
     #オーナーである場合
     else:
