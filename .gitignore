@@ -70,3 +70,10 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /ARex/[Aa]ssets/[Ss]treamingAssets/aa.meta
 /ARex/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# db model instance
+/instance
+__pycache__/
+
+.idea/
+identifier.sqlite
