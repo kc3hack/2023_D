@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using TMPro;
 
 // Join Room Script
+// サーバーがない場合もNoMatchとなる別処理がいる？？？？？
 public class JoinRoomButtonScript : MonoBehaviour
 {
     public TextMeshProUGUI room_number; // Textオブジェクト
@@ -67,6 +68,7 @@ public class JoinRoomButtonScript : MonoBehaviour
         string judge = request.downloadHandler.text;
 
         // True or False で処理を分岐
+        // return なし
         if (judge == "True")
         {
             Debug.Log("Match!!");

@@ -14,7 +14,7 @@ public class RoomPollingScript : MonoBehaviour
 {
     public float span = 1f; // 何秒おきに実行するか
     public TextMeshProUGUI room_number; // Textオブジェクト
-    public TextMeshProUGUI error_message; // Textオブジェクト
+    public Text error_message; // Textオブジェクト
     // メンバー表示用
     public RectTransform content_;
     public GameObject item_prefab_;
@@ -29,7 +29,7 @@ public class RoomPollingScript : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
-        error_message = error_message.GetComponent<TextMeshProUGUI>();
+        error_message = error_message.GetComponent<Text>();
         // 1秒おきにループ
         while (true)
         {
