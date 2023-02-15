@@ -77,3 +77,4 @@ __pycache__/
 
 .idea/
 identifier.sqlite
+.env
