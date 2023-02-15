@@ -20,7 +20,7 @@ def roomcreate():
 
     user = User.query.filter_by(uuid=user_uuid).first()
     if (user == None):
-        return 'False,NOT found user'
+        return 'False, NOT found user'
     else:
         room = Room(
             room_number=room_number,
@@ -36,7 +36,7 @@ def roomcreate():
             return 'True'
         
         except IntegrityError:
-            return 'False,the room has ALREADY exist'  
+            return 'False, the room has ALREADY exist'  
         
         except Exception as e:
             db.session.rollback()

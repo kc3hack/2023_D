@@ -18,14 +18,14 @@ def ar_pin_polling():
 
     # 存在しないuser
     if (user is None):
-        return 'False,NOT found user'
+        return 'False, NOT found user'
 
     # roomに入っていないuser
     if(user.room==None and user.room_member==None):
-        return 'False,Caution!!! enter some room!!'
+        return 'False, Caution!!! enter some room!!'
 
     if (pin is None):
-        return 'False,NOT found pin'
+        return 'False, NOT found pin'
    
     room = pin.room
     pin_list = []

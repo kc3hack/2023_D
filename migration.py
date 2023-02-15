@@ -53,13 +53,13 @@ with app.app_context():
         user_id = '1'
     )
 
-    room2 = Room(
-        room_number = '2',
-        user_id = '4'
-    )
+    # room2 = Room(
+    #     room_number = '2',
+    #     user_id = '4'
+    # )
     
     db.session.add(room1)
-    db.session.add(room2)
+    #db.session.add(room2)
 
     room_member1 = RoomMember(
         room_id = '1',

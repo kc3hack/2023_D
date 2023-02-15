@@ -6,6 +6,8 @@ from app.models.reaction import Reaction
 from app.core import db
 from datetime import datetime
 import pytz
+import sys
+
 
 
 blueprint = Blueprint('reactonadd', __name__)
@@ -27,6 +29,7 @@ def reactionadd():
     if(user==None):
         return 'False, NOT found user'
     
+    
     #ルームに入っていないユーザーの場合
     if(user.room==None and user.room_member==None):
         return 'False, Caution!!! enter some room!!'
@@ -40,18 +43,38 @@ def reactionadd():
     if(content not in content_list):
         return 'False, NOT found DEFAULT reaction'
     
+    
+    # pinにreactionする時 
     else:
-        reaction = Reaction(
-            user_id = user.id,
-            pin_id = pin.id,
-            created_at = datetime.now(pytz.timezone('Asia/Tokyo')),
-            content = content
-        )
+        room = pin.room
         
+        owner_reacton = Reaction(
+                user_id = user.id,
+                pin_id = pin.id,
+                created_at = datetime.now(pytz.timezone('Asia/Tokyo')),
+                content = content,
+                to_user_id = room.user.id   
+            )
+        
+        reactions = []
+        
+        for receiver in room.room_members:
+        
+            reaction = Reaction(
+                user_id = user.id,
+                pin_id = pin.id,
+                created_at = datetime.now(pytz.timezone('Asia/Tokyo')),
+                content = content,
+                to_user_id = receiver.user_id 
+            )
+            reactions.append(reaction)
+        
+        #pinに初めてreactionするとき  または　reactionの再生成  
         # エラーが出たらロールバック
         try:
             # dbにreactionを登録
-            db.session.add(reaction)
+            db.session.add(owner_reacton)
+            db.session.add_all(reactions)
             db.session.commit()
             return 'True' 
         
@@ -59,7 +82,7 @@ def reactionadd():
             db.session.rollback()
             return 'False,' + str(type(e).__name__)
 
-        
+   
         
     
     

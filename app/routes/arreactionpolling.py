@@ -2,7 +2,8 @@ from flask import Blueprint
 from app.lib import get_json
 from app.models.user import User
 from app.models.pin import Pin
-
+from app.models.reaction import Reaction
+from app.core import db
 
 
 blueprint = Blueprint('arreactionpolling', __name__)
@@ -35,11 +36,30 @@ def arreactionpolling():
         reaction_with_creater_list = []
         
         reactions = pin.reactions
+        used_reactions = Reaction.query.filter(Reaction.to_user_id==user.id)
         
-        for reaction in reactions:
+        for reaction in used_reactions:
             reaction_with_creater_list.append(reaction.user.name)
             reaction_with_creater_list.append(reaction.content)
+            reaction_with_creater_list.append(reaction.pin.uuid)
+        
+        length = len(reaction_with_creater_list)
+        count = length/3
+           
+        try:
+            #used_reactions = Reaction.query.filter(Reaction.to_user_id==user.id)
+            # dbからreactionを削除
             
+            for used_reaction in used_reactions:
+                db.session.delete(used_reaction)
             
-        return f'True,{len(reactions)},' + ','.join(reaction_with_creater_list)
+            db.session.commit()
+            
+        
+        except Exception as e:
+            db.session.rollback()
+            return 'False,' + str(type(e).__name__)
+            
+        return f'True,{int(count)},' + ','.join(reaction_with_creater_list)
+        #return f'True,{len(reactions)},' + ','.join(reaction_with_creater_list)
 
