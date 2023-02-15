@@ -8,9 +8,10 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 
+// RoomDelete時の処理(ホスト限定)
 public class RoomDeleteButtonScript : MonoBehaviour
 {
-    public TextMeshProUGUI error_message; // Text�I�u�W�F�N�g
+    public TextMeshProUGUI error_message; // Textオブジェクト
 
     public void Start()
     {
@@ -23,6 +24,7 @@ public class RoomDeleteButtonScript : MonoBehaviour
         StartCoroutine(Upload());
     }
 
+    // json data
     [Serializable]
     private sealed class Data
     {
@@ -31,7 +33,7 @@ public class RoomDeleteButtonScript : MonoBehaviour
 
     IEnumerator Upload()
     {
-        /// uuid���[�h
+        // uuidロード
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
         var url = "http://4.241.111.128:3000/roomdelete";
         var data = new Data();
@@ -47,6 +49,7 @@ public class RoomDeleteButtonScript : MonoBehaviour
 
         request.SetRequestHeader("Content-Type", "application/json");
 
+        // 送信
         yield return request.SendWebRequest();
 
         Debug.Log(request.downloadHandler.text);

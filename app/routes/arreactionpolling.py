@@ -2,24 +2,22 @@ from flask import Blueprint
 from app.lib import get_json
 from app.models.user import User
 from app.models.pin import Pin
-from app.core import db
-
-blueprint = Blueprint('pincancel',__name__)
 
 
-@blueprint.route('/pincancel',methods=['POST'])
-def pincancel():
+
+blueprint = Blueprint('arreactionpolling', __name__)
+
+@blueprint.route('/arreactionpolling',methods=['POST'])
+def arreactionpolling():
     # jsonリクエストから値取得
     data = get_json()
     
     user_uuid = data['user_uuid']
     pin_uuid = data['pin_uuid']
-    
+
     user = User.query.filter_by(uuid=user_uuid).first()
     pin = Pin.query.filter_by(uuid=pin_uuid).first()
-    
-    
-    
+
     #不正なユーザーの場合
     if(user==None):
         return 'False, NOT found user'
@@ -32,24 +30,16 @@ def pincancel():
     if(pin==None):
         return 'False, NOT found pin'
     
-    #pinを刺したユーザーではない場合
-    if(user.pin==None):
-        return 'False, you did NOT create this pin'
-    
-    #pinを刺したユーザー本人の場合
     else:
-         # エラーが出たらロールバック
-        try:
-            # dbからpinを削除
-            db.session.delete(pin)
-            db.session.commit()
-            return 'True'
-        except Exception as e:
-            db.session.rollback()
-            return 'False,' + str(type(e).__name__)
-    
-    
-    
-
-
+        
+        reaction_with_creater_list = []
+        
+        reactions = pin.reactions
+        
+        for reaction in reactions:
+            reaction_with_creater_list.append(reaction.user.name)
+            reaction_with_creater_list.append(reaction.content)
+            
+            
+        return f'True,{len(reactions)},' + ','.join(reaction_with_creater_list)
 

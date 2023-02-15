@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Logout å‡¦ç†
 public class LogoutButtonScript : MonoBehaviour
 {
     public void OnClickLogoutButton()
     {
-        ///Useruuid del
+        // Useruuid del
         PlayerPrefs.DeleteKey("Useruuid");
-        ///ƒ[ƒh
+        // ãƒ­ãƒ¼ãƒ‰
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
         Debug.Log(useruuid);
         SceneManager.LoadScene("TitleScene");

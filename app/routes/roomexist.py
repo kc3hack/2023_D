@@ -25,10 +25,10 @@ def roomexist():
     
     
     if(user==None):
-        return 'False,unknown user'
+        return 'False, unknown user'
     
     elif(room==None):
-        return 'False,NOT found room'
+        return 'False, NOT found room'
             
     elif(room.user_id == user.id):
         return 'Caution caused by frontend!!,YOU ARE OWNER!!!'
@@ -45,7 +45,7 @@ def roomexist():
             # dbにroom_memberを登録
             db.session.add(room_member)
             db.session.commit()
-            return 'True,enter the room'
+            return 'True, enter the room'
         except Exception as e:
             db.session.rollback()
             return 'False,' + str(type(e).__name__)
