@@ -9,6 +9,7 @@ from app.routes.roompoling import blueprint as roompoling_blueprint
 from app.routes.roomleave import blueprint as roomleave_blueprint
 from app.routes.reactionadd import blueprint as reactionadd_blueprint
 from app.routes.pincancel import blueprint as pincancel_blueprint
+from app.routes.arpinpolling import blueprint as arpinpolling_blueprint
 
 app.register_blueprint(register_blueprint)
 app.register_blueprint(login_blueprint)
@@ -20,5 +21,4 @@ app.register_blueprint(roompoling_blueprint)
 app.register_blueprint(roomleave_blueprint)
 app.register_blueprint(reactionadd_blueprint)
 app.register_blueprint(pincancel_blueprint)
-
-
+app.register_blueprint(arpinpolling_blueprint)
