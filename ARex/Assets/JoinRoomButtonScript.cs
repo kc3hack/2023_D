@@ -65,7 +65,10 @@ public class JoinRoomButtonScript : MonoBehaviour
 
         // レスポンス取得
         Debug.Log(request.downloadHandler.text);
-        string judge = request.downloadHandler.text;
+        // レスポンスをパース
+        string[] arr = request.downloadHandler.text.Split(',');
+        // True or False を judge に格納
+        string judge = arr[0];
 
         // True or False で処理を分岐
         // return なし
