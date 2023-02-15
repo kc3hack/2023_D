@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 
+// ユーザー登録Script
 public class RegisterRoomButtonScript : MonoBehaviour
 {
     public TextMeshProUGUI user_name; // Textオブジェクト
@@ -26,17 +27,16 @@ public class RegisterRoomButtonScript : MonoBehaviour
     {
         user_name = user_name.GetComponent<TextMeshProUGUI>();
         user_name_str = user_name.text;
-        ///Replace("​", "")の一つ目の""内にはゼロ幅スペース"%E2%80%8B"が入っています。
+        // Replace("​", "")の一つ目の""内にはゼロ幅スペース"%E2%80%8B"が入っています。
         user_name_str = user_name_str.Replace("​", "");
         user_password = user_password.GetComponent<TextMeshProUGUI>();
         user_password_str = user_password.text;
-        ///Replace("​", "")の一つ目の""内にはゼロ幅スペース"%E2%80%8B"が入っています。
+        // Replace("​", "")の一つ目の""内にはゼロ幅スペース"%E2%80%8B"が入っています。
         user_password_str = user_password_str.Replace("​", "");
-        ///Debug.Log(user_name_str);
-        ///Debug.Log(user_password_str);
         StartCoroutine(Upload());
     }
 
+    // json data
     [Serializable]
     private sealed class Data
     {
@@ -46,7 +46,7 @@ public class RegisterRoomButtonScript : MonoBehaviour
 
     IEnumerator Upload()
     {
-        /// uuidロード
+        // uuidロード
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
         var url = "http://itoho.ddns.net:5000/register";
         var data = new Data();
@@ -71,7 +71,7 @@ public class RegisterRoomButtonScript : MonoBehaviour
         string judge = arr[0];
         if (judge == "True")
         {
-            /// 登録時にuuidがいるのか？
+            // 登録時にuuidがいるのか？
             PlayerPrefs.SetString("Useruuid", arr[1]);
             useruuid = arr[1];
             Debug.Log("login successful UUID:" + useruuid);

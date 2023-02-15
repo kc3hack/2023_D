@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 
+// 待機画面を抜ける(離れる)
 public class LeaveButtonScript : MonoBehaviour
 {
 
@@ -16,17 +17,12 @@ public class LeaveButtonScript : MonoBehaviour
 
     }
 
-
     public void OnClickLeaveButton()
     {
         StartCoroutine(Upload());
     }
 
-
-
-
-
-
+    // json data
     [Serializable]
     private sealed class Data
     {
@@ -35,7 +31,7 @@ public class LeaveButtonScript : MonoBehaviour
 
     IEnumerator Upload()
     {
-        /// uuidロード
+        // uuidロード
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
         var url = "http://itoho.ddns.net:5000/roomleave";
         var data = new Data();
@@ -50,9 +46,10 @@ public class LeaveButtonScript : MonoBehaviour
         };
 
         request.SetRequestHeader("Content-Type", "application/json");
-
+        // 送信(レスポンスなし)
         yield return request.SendWebRequest();
 
+        // RoomlistSceneに戻る
         SceneManager.LoadScene("RoomListScene");
     }
 }
