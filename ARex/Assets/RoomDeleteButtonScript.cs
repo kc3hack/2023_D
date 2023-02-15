@@ -35,7 +35,7 @@ public class RoomDeleteButtonScript : MonoBehaviour
     {
         // uuidロード
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
-        var url = "http://4.241.111.128:3000/roomdelete";
+        var url = "http://itoho.ddns.net:5000/roomdelete";
         var data = new Data();
         data.user_uuid = useruuid;
         var json = JsonUtility.ToJson(data);
@@ -67,6 +67,7 @@ public class RoomDeleteButtonScript : MonoBehaviour
             string error = arr[1];
             error_message = error_message.GetComponent<TextMeshProUGUI>();
             error_message.text = error;
+            Debug.Log("test:false");
             Debug.Log("error:" + error);
         }
 

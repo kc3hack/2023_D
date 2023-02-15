@@ -13,7 +13,7 @@ public class CreateRoomButtonScript : MonoBehaviour
 {
     public TextMeshProUGUI room_number; // Textオブジェクト
     string room_number_str;
-    public TextMeshProUGUI error_message; // Textオブジェクト
+    public Text error_message; // Textオブジェクト
 
     public void Start()
     {
@@ -66,23 +66,33 @@ public class CreateRoomButtonScript : MonoBehaviour
 
         // レスポンス受信
         Debug.Log(request.downloadHandler.text);
-
-        // レスポンスを処理
-        //　レスポンスを配列に格納
-        string[] arr = request.downloadHandler.text.Split(',');
-        string judge = arr[0];
-        
-        if (judge == "True")
+        try
         {
-            // 待機画面へ
-            Debug.Log("Create!!");
-            SceneManager.LoadScene("MemberListScene");
+            // レスポンスを処理
+            // レスポンスを配列に格納
+            string[] arr = request.downloadHandler.text.Split(',');
+            string judge = arr[0];
+        
+            if (judge == "True")
+            {
+                // 待機画面へ
+                Debug.Log("Create!!");
+                SceneManager.LoadScene("MemberListScene");
+            }
+            else
+            {   
+                // エラーメッセージ表示
+                string error = arr[1];
+                error_message = error_message.GetComponent<Text>();
+                error_message.text = error;
+                Debug.Log("error:" + error);
+                Debug.Log("useruuid:" + useruuid);
+            }
         }
-        else
-        {   
-            // エラーメッセージ表示
-            string error = arr[1];
-            error_message = error_message.GetComponent<TextMeshProUGUI>();
+        catch
+        {
+            string error = "サーバーに接続できない";
+            error_message = error_message.GetComponent<Text>();
             error_message.text = error;
             Debug.Log("error:" + error);
             Debug.Log("useruuid:" + useruuid);
