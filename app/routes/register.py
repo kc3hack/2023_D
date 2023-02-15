@@ -3,11 +3,16 @@ from app.lib import get_json
 from datetime import datetime
 from app.models.user import User
 from app.core import db
+from werkzeug.security import generate_password_hash
 
 import uuid
 import pytz
 
 blueprint = Blueprint('register', __name__)
+
+
+def changed_password_to_hash(password):
+    return generate_password_hash(password, method='sha256')
 
 
 @blueprint.route('/register', methods=['POST'])
@@ -16,13 +21,17 @@ def register():
     data = get_json()
     username = data['name']
     userpassword = data['password']
+
+    # Passwordをhash化
+    hashed_password = changed_password_to_hash(userpassword)
+
     # uuidを生成
     useruuid = str(uuid.uuid4())
     usercreated_at = datetime.now(pytz.timezone('Asia/Tokyo'))
 
     user = User(
         name=username,
-        password=userpassword,
+        password=hashed_password,
         uuid=useruuid,
         created_at=usercreated_at
     )

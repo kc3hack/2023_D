@@ -1,6 +1,7 @@
 from flask import Blueprint
 from app.lib import get_json
 from app.models.user import User
+from werkzeug.security import check_password_hash
 
 blueprint = Blueprint('login', __name__)
 
@@ -15,7 +16,7 @@ def login():
     if user is None:
         return 'False,NOT found user'
 
-    if user.password == userpassword:
+    if check_password_hash(user.password, userpassword):
         return 'True,' + user.uuid
     else:
         return 'False, INCORRECT password'
