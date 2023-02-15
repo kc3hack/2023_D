@@ -36,7 +36,7 @@ public class RoomPollingScript : MonoBehaviour
             // ループ処理
             yield return new WaitForSeconds(span);
             Debug.LogFormat("{0}秒経過", span);
-            Debug.Log("api開始");
+            // Debug.Log("api開始");
             
             // リクエスト作成
             // uuidロード
@@ -83,7 +83,7 @@ public class RoomPollingScript : MonoBehaviour
                     Debug.Log("connecting!");
                     Debug.Log("UUID:" + useruuid);
                     room_number = room_number.GetComponent<TextMeshProUGUI>();
-                    room_number.text = arr[1];
+                    room_number.text = "id:" + arr[1];
                     // 以下にメンバー表示処理を書く
                     int mom = Convert.ToInt32(arr[2]);
 
