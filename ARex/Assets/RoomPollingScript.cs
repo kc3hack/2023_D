@@ -14,7 +14,7 @@ public class RoomPollingScript : MonoBehaviour
 {
     public float span = 1f; // 何秒おきに実行するか
     public TextMeshProUGUI room_number; // Textオブジェクト
-    public TextMeshProUGUI error_message; // Textオブジェクト
+    public Text error_message; // Textオブジェクト
     // メンバー表示用
     public RectTransform content_;
     public GameObject item_prefab_;
@@ -29,14 +29,14 @@ public class RoomPollingScript : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
-        error_message = error_message.GetComponent<TextMeshProUGUI>();
+        error_message = error_message.GetComponent<Text>();
         // 1秒おきにループ
         while (true)
         {
             // ループ処理
             yield return new WaitForSeconds(span);
             Debug.LogFormat("{0}秒経過", span);
-            Debug.Log("api開始");
+            // Debug.Log("api開始");
             
             // リクエスト作成
             // uuidロード
@@ -83,7 +83,7 @@ public class RoomPollingScript : MonoBehaviour
                     Debug.Log("connecting!");
                     Debug.Log("UUID:" + useruuid);
                     room_number = room_number.GetComponent<TextMeshProUGUI>();
-                    room_number.text = arr[1];
+                    room_number.text = "id:" + arr[1];
                     // 以下にメンバー表示処理を書く
                     int mom = Convert.ToInt32(arr[2]);
 

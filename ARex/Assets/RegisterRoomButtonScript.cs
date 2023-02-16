@@ -15,7 +15,7 @@ public class RegisterRoomButtonScript : MonoBehaviour
     string user_name_str;
     public TextMeshProUGUI user_password; // Textオブジェクト
     string user_password_str;
-    public TextMeshProUGUI error_message; // Textオブジェクト
+    public Text error_message; // Textオブジェクト
 
     public void Start()
     {
@@ -64,23 +64,31 @@ public class RegisterRoomButtonScript : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
 
         yield return request.SendWebRequest();
-
         Debug.Log(request.downloadHandler.text);
-
-        string[] arr = request.downloadHandler.text.Split(',');
-        string judge = arr[0];
-        if (judge == "True")
+        try
         {
-            // 登録時にuuidがいるのか？
-            PlayerPrefs.SetString("Useruuid", arr[1]);
-            useruuid = arr[1];
-            Debug.Log("login successful UUID:" + useruuid);
-            SceneManager.LoadScene("LoginScene");
+            string[] arr = request.downloadHandler.text.Split(',');
+            string judge = arr[0];
+            if (judge == "True")
+            {
+                // 登録時にuuidがいるのか？
+                PlayerPrefs.SetString("Useruuid", arr[1]);
+                useruuid = arr[1];
+                Debug.Log("login successful UUID:" + useruuid);
+                SceneManager.LoadScene("LoginScene");
+            }
+            else
+            {
+                string error = arr[1];
+                error_message = error_message.GetComponent<Text>();
+                error_message.text = error;
+                Debug.Log("error:" + error);
+            }
         }
-        else
+        catch
         {
-            string error = arr[1];
-            error_message = error_message.GetComponent<TextMeshProUGUI>();
+            string error = "サーバーに接続できない";
+            error_message = error_message.GetComponent<Text>();
             error_message.text = error;
             Debug.Log("error:" + error);
         }

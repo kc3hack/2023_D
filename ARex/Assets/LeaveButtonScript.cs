@@ -11,6 +11,7 @@ using TMPro;
 // 待機画面を抜ける(離れる)
 public class LeaveButtonScript : MonoBehaviour
 {
+    public Text error_message; // Textオブジェクト
 
     public void Start()
     {
@@ -46,10 +47,27 @@ public class LeaveButtonScript : MonoBehaviour
         };
 
         request.SetRequestHeader("Content-Type", "application/json");
-        // 送信(レスポンスなし)
+        // 送信
         yield return request.SendWebRequest();
+        Debug.Log(request.downloadHandler.text);
+        string[] arr = request.downloadHandler.text.Split(',');
+        string judge = arr[0];
+        // True or False で処理を分岐
+        // return なし
+        if (judge == "True")
+        {
+            Debug.Log("Match!!");
+            SceneManager.LoadScene("MemberListScene");
+            // RoomlistSceneに戻る
+            SceneManager.LoadScene("RoomListScene");
+        }
+        else
+        {
+            string error = arr[1];
+            error_message = error_message.GetComponent<Text>();
+            error_message.text = error;
+            Debug.Log("error:" + error);
+        }
 
-        // RoomlistSceneに戻る
-        SceneManager.LoadScene("RoomListScene");
     }
 }
