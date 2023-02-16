@@ -3,7 +3,6 @@ from app.lib import get_json
 from app.models.user import User
 from app.models.room import Room
 from app.core import db
-import sys
 
 blueprint = Blueprint('roomdelete', __name__)
 
@@ -29,17 +28,10 @@ def roomdelete():
         # エラーが出たらロールバック
         try:
             # dbからroomを削除
-            print("try moving")
-            print('This is error output', file=sys.stderr)
             db.session.delete(room)
-            print("delete success")
-            print('This is error output', file=sys.stderr)
             db.session.commit()
             return 'True'
         except Exception as e:
-            print("try moving" + e)
-            print('This is error output', file=sys.stderr)
-
             db.session.rollback()
             return 'False,' + str(type(e).__name__)
  
