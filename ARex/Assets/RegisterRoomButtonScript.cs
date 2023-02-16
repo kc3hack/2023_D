@@ -17,12 +17,6 @@ public class RegisterRoomButtonScript : MonoBehaviour
     string user_password_str;
     public Text error_message; // Textオブジェクト
 
-    public void Start()
-    {
-
-    }
-
-
     public void OnClick()
     {
         user_name = user_name.GetComponent<TextMeshProUGUI>();
@@ -33,6 +27,17 @@ public class RegisterRoomButtonScript : MonoBehaviour
         user_password_str = user_password.text;
         // Replace("​", "")の一つ目の""内にはゼロ幅スペース"%E2%80%8B"が入っています。
         user_password_str = user_password_str.Replace("​", "");
+        // 空欄チェック。空欄ならエラーを表示
+        int user_name_str_length = user_name_str.Length;
+        int user_password_str_length = user_password_str.Length;
+        if (user_name_str_length <= 1 || user_password_str_length <= 1)
+        {
+            string error = "ユーザー名とパスワードを入力してください";
+            error_message = error_message.GetComponent<Text>();
+            error_message.text = error;
+            Debug.Log("error:" + error);
+            return;
+        }
         StartCoroutine(Upload());
     }
 
