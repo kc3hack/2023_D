@@ -9,17 +9,10 @@ using UnityEngine.UI;
 using TMPro;
 
 // Join Room Script
-// サーバーがない場合もNoMatchとなる別処理がいる？？？？？
 public class JoinRoomButtonScript : MonoBehaviour
 {
     public TextMeshProUGUI room_number; // Textオブジェクト
     string room_number_str;
-
-    public void Start()
-    {
-
-    }
-
 
     public void OnClickJoinRoomButton()
     {
