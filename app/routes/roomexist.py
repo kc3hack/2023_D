@@ -31,7 +31,7 @@ def roomexist():
         return 'False, NOT found room'
             
     elif(room.user_id == user.id):
-        return 'Caution caused by frontend!!,YOU ARE OWNER!!!'
+        return 'False, Caution YOU ARE OWNER'
     
     else:
         room_member=RoomMember(
