@@ -13,7 +13,6 @@ def roomdelete():
     data = get_json()
 
     user_uuid = data['user_uuid']
-    return user_uuid
     user = User.query.filter_by(uuid=user_uuid).first()
 
     if(user==None):
@@ -29,12 +28,10 @@ def roomdelete():
         # エラーが出たらロールバック
         try:
             # dbからroomを削除
-            return room + ',' + room.user.uuid
             db.session.delete(room)
             db.session.commit()
             return 'True'
         except Exception as e:
             db.session.rollback()
             return 'False,' + str(type(e).__name__)
-        
-        
+ 
