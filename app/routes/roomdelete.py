@@ -13,7 +13,7 @@ def roomdelete():
     data = get_json()
 
     user_uuid = data['user_uuid']
-
+    return user_uuid
     user = User.query.filter_by(uuid=user_uuid).first()
 
     if(user==None):
