@@ -29,11 +29,12 @@ def roomdelete():
         # エラーが出たらロールバック
         try:
             # dbからroomを削除
+            return room + ',' + room.user.uuid
             db.session.delete(room)
             db.session.commit()
             return 'True'
         except Exception as e:
             db.session.rollback()
-            return 'False,' + e #str(type(e).__name__)
+            return 'False,' + str(type(e).__name__)
         
         
