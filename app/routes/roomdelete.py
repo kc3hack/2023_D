@@ -30,10 +30,10 @@ def roomdelete():
         try:
             # dbからroomを削除
             print("try moving")
-            print('This is error output', file=sys.stdout)
+            print('This is error output', file=sys.stderr)
             db.session.delete(room)
             print("delete success")
-            print('This is error output', file=sys.stdout)
+            print('This is error output', file=sys.stderr)
             db.session.commit()
             return 'True'
         except Exception as e:
