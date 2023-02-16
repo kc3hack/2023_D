@@ -25,11 +25,11 @@ def pinadd():
 
     user = User.query.filter_by(uuid=user_uuid).first()
     if (user == None):
-        return 'False,NOT found user'
+        return 'False, NOT found user'
 
     typelist = ['go','enemy','item','attack','go2','defend','watch','trace']  
     if (pin_type not in typelist):
-        return 'False,NOT found pin'
+        return 'False, NOT found pin'
 
     pin = Pin(
         altitude=altitude,
