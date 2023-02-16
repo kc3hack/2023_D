@@ -28,6 +28,7 @@ def roomdelete():
         # エラーが出たらロールバック
         try:
             # dbからroomを削除
+            print("try moving")
             db.session.delete(room)
             print("delete success")
             db.session.commit()
