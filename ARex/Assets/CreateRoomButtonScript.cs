@@ -16,11 +16,6 @@ public class CreateRoomButtonScript : MonoBehaviour
     int room_number_int;
     public Text error_message; // Textオブジェクト
 
-    public void Start()
-    {
-
-    }
-
     public void OnClickCreateRoomButton()
     {
         // ルーム番号取得
@@ -29,7 +24,20 @@ public class CreateRoomButtonScript : MonoBehaviour
         room_number_str = room_number.text;
         // Replace("​", "")の一つ目の""内にはゼロ幅スペース"%E2%80%8B"が入っています。
         room_number_str = room_number_str.Replace("​", "");
-        room_number_int = int.Parse(room_number_str);
+        // roomidをintに変換
+        try
+        {
+            room_number_int = int.Parse(room_number_str);
+        }
+        catch
+        {
+            string error = "無効なroomidです";
+            error_message = error_message.GetComponent<Text>();
+            error_message.text = error;
+            Debug.Log("error:" + error);
+            return;
+        }
+        //　ルーム番号が0以上かチェック
         if (0 <= room_number_int)
         {
             StartCoroutine(Upload());
@@ -41,7 +49,6 @@ public class CreateRoomButtonScript : MonoBehaviour
             error_message.text = error;
             Debug.Log("error:" + error);
         }
-        // StartCoroutine(Upload());
     }
 
     // json data
