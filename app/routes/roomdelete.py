@@ -29,6 +29,7 @@ def roomdelete():
         try:
             # dbからroomを削除
             db.session.delete(room)
+            print("delete success")
             db.session.commit()
             return 'True'
         except Exception as e:
