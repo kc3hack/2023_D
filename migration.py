@@ -109,7 +109,7 @@ with app.app_context():
         latitude ='1080.984',  
         type = 'defend',
         user_id = '4',
-        room_id = '2'
+        room_id = '1'
     )
     
     db.session.add(pin1)
