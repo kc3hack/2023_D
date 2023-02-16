@@ -37,6 +37,9 @@ def roomdelete():
             db.session.commit()
             return 'True'
         except Exception as e:
+            print("try moving" + e)
+            print('This is error output', file=sys.stderr)
+
             db.session.rollback()
             return 'False,' + str(type(e).__name__)
  
