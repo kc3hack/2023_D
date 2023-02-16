@@ -34,6 +34,6 @@ def roomdelete():
             return 'True'
         except Exception as e:
             db.session.rollback()
-            return 'False,' + str(type(e).__name__)
+            return 'False,' + e #str(type(e).__name__)
         
         
