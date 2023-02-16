@@ -38,15 +38,11 @@ def arreactionpolling():
         used_reactions = Reaction.query.filter(Reaction.to_user_id == user.id).all()
 
         for reaction in used_reactions:
-            reaction_with_creater_list.append(reaction.user.name)
-            reaction_with_creater_list.append(reaction.content)
-            reaction_with_creater_list.append(reaction.pin.uuid)
+            reaction_with_creater_list.extend([reaction.user.name, reaction.content, reaction.pin.uuid])
 
         count = len(used_reactions)
         try:
-            # used_reactions = Reaction.query.filter(Reaction.to_user_id==user.id)
             # dbからreactionを削除
-
             for used_reaction in used_reactions:
                 db.session.delete(used_reaction)
 
