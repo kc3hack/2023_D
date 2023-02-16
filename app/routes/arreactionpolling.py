@@ -25,7 +25,7 @@ def arreactionpolling():
     
     #ルームに入っていないユーザーの場合
     if(user.room==None and user.room_member==None):
-        return 'Caution!! enter some room!!'
+        return 'False, Caution!! enter some room!!'
     
     #pinが存在しない場合
     if(pin==None):

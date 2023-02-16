@@ -32,7 +32,7 @@ def reactionadd():
     
     #ルームに入っていないユーザーの場合
     if(user.room==None and user.room_member==None):
-        return 'False, Caution!!! enter some room!!'
+        return 'False, Caution  enter some room'
     
     #pinが存在しないとき
     if(pin==None):
