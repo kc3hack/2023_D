@@ -28,13 +28,14 @@ def reactionadd():
     # 不正なユーザーの場合
     if (user == None):
         return 'False, NOT found user'
-
-    # ルームに入っていないユーザーの場合
-    if (user.room == None and user.room_member == None):
-        return 'False, Caution!!! enter some room!!'
-
-    # pinが存在しないとき
-    if (pin == None):
+    
+    
+    #ルームに入っていないユーザーの場合
+    if(user.room==None and user.room_member==None):
+        return 'False, Caution  enter some room'
+    
+    #pinが存在しないとき
+    if(pin==None):
         return 'False, NOT found pin'
 
     reaction_list = ['ok', 'no', 'unable', 'stop']
