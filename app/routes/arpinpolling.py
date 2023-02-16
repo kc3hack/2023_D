@@ -1,9 +1,6 @@
 from flask import Blueprint
 from app.lib import get_json
-from app.models.room import Room
 from app.models.user import User
-from app.models.pin import Pin
-
 
 blueprint = Blueprint('arpinpolling', __name__)
 
@@ -11,10 +8,9 @@ blueprint = Blueprint('arpinpolling', __name__)
 def ar_pin_polling():
     data = get_json()
     user_uuid = data['user_uuid']
-    pin_uuid = data['pin_uuid']
 
     user = User.query.filter_by(uuid=user_uuid).first()
-    pin = Pin.query.filter_by(uuid=pin_uuid).first()
+    pin = user.pin
 
     # 存在しないuser
     if (user is None):
@@ -25,7 +21,7 @@ def ar_pin_polling():
         return 'False, Caution!!! enter some room!!'
 
     if (pin is None):
-        return 'False, NOT found pin'
+        return 'True,0'
    
     room = pin.room
     pin_list = []
