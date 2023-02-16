@@ -22,7 +22,6 @@ def arreactionpolling():
     # 不正なユーザーの場合
     if (user == None):
         return 'False, NOT found user'
-<<<<<<< HEAD
     
     #ルームに入っていないユーザーの場合
     if(user.room==None and user.room_member==None):
@@ -30,15 +29,6 @@ def arreactionpolling():
     
     #pinが存在しない場合
     if(pin==None):
-=======
-
-    # ルームに入っていないユーザーの場合
-    if (user.room == None and user.room_member == None):
-        return 'Caution!! enter some room!!'
-
-    # pinが存在しない場合
-    if (pin == None):
->>>>>>> main
         return 'False, NOT found pin'
 
     else:
