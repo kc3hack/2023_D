@@ -13,6 +13,7 @@ public class CreateRoomButtonScript : MonoBehaviour
 {
     public TextMeshProUGUI room_number; // Textオブジェクト
     string room_number_str;
+    int room_number_int;
     public Text error_message; // Textオブジェクト
 
     public void Start()
@@ -28,8 +29,19 @@ public class CreateRoomButtonScript : MonoBehaviour
         room_number_str = room_number.text;
         // Replace("​", "")の一つ目の""内にはゼロ幅スペース"%E2%80%8B"が入っています。
         room_number_str = room_number_str.Replace("​", "");
-        // Debug.Log(room_number_str);
-        StartCoroutine(Upload());
+        room_number_int = int.Parse(room_number_str);
+        if (0 <= room_number_int)
+        {
+            StartCoroutine(Upload());
+        }
+        else
+        {
+            string error = "無効なroomidです";
+            error_message = error_message.GetComponent<Text>();
+            error_message.text = error;
+            Debug.Log("error:" + error);
+        }
+        // StartCoroutine(Upload());
     }
 
     // json data
