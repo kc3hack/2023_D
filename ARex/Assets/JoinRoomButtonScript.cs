@@ -37,7 +37,7 @@ public class JoinRoomButtonScript : MonoBehaviour
     IEnumerator Upload()
     {
         // uuidロード
-        var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
+        var useruuid = PlayerPrefs.GetString("Useruuid", "");
         var url = "http://itoho.ddns.net:5000/roomexist";
         var data = new Data();
         data.user_uuid = useruuid;

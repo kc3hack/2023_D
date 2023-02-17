@@ -40,7 +40,7 @@ public class RoomPollingScript : MonoBehaviour
             
             // リクエスト作成
             // uuidロード
-            var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
+            var useruuid = PlayerPrefs.GetString("Useruuid", "");
             var url = "http://itoho.ddns.net:5000/roompolling";
             var data = new Data();
             data.user_uuid = useruuid;
