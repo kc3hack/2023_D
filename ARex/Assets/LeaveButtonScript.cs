@@ -57,7 +57,8 @@ public class LeaveButtonScript : MonoBehaviour
         if (judge == "True")
         {
             Debug.Log("Match!!");
-            SceneManager.LoadScene("MemberListScene");
+            // Roomnumber del
+            PlayerPrefs.SetString("Roomnumber", "");
             // RoomlistSceneに戻る
             SceneManager.LoadScene("RoomListScene");
         }

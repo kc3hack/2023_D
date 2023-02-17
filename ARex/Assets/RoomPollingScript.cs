@@ -84,6 +84,7 @@ public class RoomPollingScript : MonoBehaviour
                     // Debug.Log("UUID:" + useruuid);
                     room_number = room_number.GetComponent<TextMeshProUGUI>();
                     room_number.text = "id:" + arr[1];
+                    PlayerPrefs.SetString("Roomnumber", arr[1]);
                     // 以下にメンバー表示処理を書く
                     int mom = Convert.ToInt32(arr[2]);
 
@@ -124,13 +125,6 @@ public class RoomPollingScript : MonoBehaviour
                 Debug.Log("error:" + error);
             }
 
-
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -54,6 +54,8 @@ public class RoomDeleteButtonScript : MonoBehaviour
         {
             Debug.Log("room del success!");
             Debug.Log("UUID:" + useruuid);
+            // Roomnumber del
+            PlayerPrefs.SetString("Roomnumber", "");
             SceneManager.LoadScene("RoomListScene");
         }
         else
