@@ -8,10 +8,6 @@ public class CreateButtonScript : MonoBehaviour
 {
     public void OnClickCreateButton()
     {
-        // uuidロード
-        var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
-        Debug.Log(useruuid);
-
         SceneManager.LoadScene("RoomCreateScene");
     }
 }

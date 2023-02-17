@@ -11,7 +11,7 @@ public class LogoutButtonScript : MonoBehaviour
         // Useruuid del
         PlayerPrefs.DeleteKey("Useruuid");
         // ロード
-        var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
+        var useruuid = PlayerPrefs.GetString("Useruuid", "");
         Debug.Log(useruuid);
         SceneManager.LoadScene("TitleScene");
     }
