@@ -81,6 +81,10 @@ public class JoinRoomButtonScript : MonoBehaviour
             {
                 Debug.Log("You can login");
                 SceneManager.LoadScene("MemberListScene");
+            }else if (request.downloadHandler.text.IndexOf("owner")!=-1)
+            {
+                Debug.Log("You can login");
+                SceneManager.LoadScene("MemberListScene");
             }
             else
             {
