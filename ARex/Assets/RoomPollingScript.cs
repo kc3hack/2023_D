@@ -107,6 +107,7 @@ public class RoomPollingScript : MonoBehaviour
                         var item_text = item.GetComponentInChildren<Text>();
                         item_text.text = namelist[i];
                     }
+                    content_.GetComponent<RectTransform>().sizeDelta = new Vector2(0, mom * 50);
                 }
                 else
                 {
