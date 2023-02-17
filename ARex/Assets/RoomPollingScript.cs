@@ -83,6 +83,7 @@ public class RoomPollingScript : MonoBehaviour
                     Debug.Log("connecting!");
                     Debug.Log("UUID:" + useruuid);
                     room_number = room_number.GetComponent<TextMeshProUGUI>();
+                    PlayerPrefs.SetString("Roomnumber", room_number.text);
                     room_number.text = arr[1];
                     // 以下にメンバー表示処理を書く
                     int mom = Convert.ToInt32(arr[2]);

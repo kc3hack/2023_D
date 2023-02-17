@@ -11,6 +11,6 @@ public class EnterButtonScript : MonoBehaviour
         // uuidロード
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
         Debug.Log("UUID:" + useruuid);
-        SceneManager.LoadScene("ARScene");
+        SceneManager.LoadScene("GeospatialAR");
     }
 }

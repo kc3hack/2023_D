@@ -136,6 +136,8 @@ PlayerSettings:
     Others: 1
   bundleVersion: 0.1
   preloadedAssets:
+  - {fileID: 562393118101433411, guid: 94fc192efffed2443b2ac60bae8f9db8, type: 2}
+  - {fileID: 4800000, guid: c9f956787b1d945e7b36e0516201fc76, type: 3}
   - {fileID: 11400000, guid: ab4be84a8e09bd64593437fd4612595d, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -924,4 +926,3 @@ PlayerSettings:
   playerDataPath: 
   forceSRGBBlit: 1
   virtualTexturingSupportEnabled: 0
-  

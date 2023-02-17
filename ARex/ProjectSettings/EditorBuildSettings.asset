@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/ARScene.unity
-    guid: d2bcc4db62b65ef488506cceb4041f7b
-  - enabled: 1
     path: Assets/Scenes/LoginScene.unity
     guid: 7102c4841539f1f46b6f25791b4ddf24
   - enabled: 1
@@ -32,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RoomListScene.unity
     guid: 41191ccc22faad7429fc2b8bd0006478
+  - enabled: 1
+    path: Assets/Scenes/GeospatialAR.unity
+    guid: 2fadb1d0b1f00584994ec77453bb76ad
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
