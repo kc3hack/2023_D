@@ -13,12 +13,8 @@ public class CreateRoomButtonScript : MonoBehaviour
 {
     public TextMeshProUGUI room_number; // Textオブジェクト
     string room_number_str;
-    public TextMeshProUGUI error_message; // Textオブジェクト
-
-    public void Start()
-    {
-
-    }
+    int room_number_int;
+    public Text error_message; // Textオブジェクト
 
     public void OnClickCreateRoomButton()
     {
@@ -28,8 +24,31 @@ public class CreateRoomButtonScript : MonoBehaviour
         room_number_str = room_number.text;
         // Replace("​", "")の一つ目の""内にはゼロ幅スペース"%E2%80%8B"が入っています。
         room_number_str = room_number_str.Replace("​", "");
-        // Debug.Log(room_number_str);
-        StartCoroutine(Upload());
+        // roomidをintに変換
+        try
+        {
+            room_number_int = int.Parse(room_number_str);
+        }
+        catch
+        {
+            string error = "無効なroomidです";
+            error_message = error_message.GetComponent<Text>();
+            error_message.text = error;
+            Debug.Log("error:" + error);
+            return;
+        }
+        //　ルーム番号が0以上かチェック
+        if (0 <= room_number_int)
+        {
+            StartCoroutine(Upload());
+        }
+        else
+        {
+            string error = "無効なroomidです";
+            error_message = error_message.GetComponent<Text>();
+            error_message.text = error;
+            Debug.Log("error:" + error);
+        }
     }
 
     // json data
@@ -66,23 +85,33 @@ public class CreateRoomButtonScript : MonoBehaviour
 
         // レスポンス受信
         Debug.Log(request.downloadHandler.text);
-
-        // レスポンスを処理
-        //　レスポンスを配列に格納
-        string[] arr = request.downloadHandler.text.Split(',');
-        string judge = arr[0];
-        
-        if (judge == "True")
+        try
         {
-            // 待機画面へ
-            Debug.Log("Create!!");
-            SceneManager.LoadScene("MemberListScene");
+            // レスポンスを処理
+            // レスポンスを配列に格納
+            string[] arr = request.downloadHandler.text.Split(',');
+            string judge = arr[0];
+
+            if (judge == "True")
+            {
+                // 待機画面へ
+                Debug.Log("Create!!");
+                SceneManager.LoadScene("MemberListScene");
+            }
+            else
+            {
+                // エラーメッセージ表示
+                string error = arr[1];
+                error_message = error_message.GetComponent<Text>();
+                error_message.text = error;
+                Debug.Log("error:" + error);
+                Debug.Log("useruuid:" + useruuid);
+            }
         }
-        else
-        {   
-            // エラーメッセージ表示
-            string error = arr[1];
-            error_message = error_message.GetComponent<TextMeshProUGUI>();
+        catch
+        {
+            string error = "サーバーに接続できない";
+            error_message = error_message.GetComponent<Text>();
             error_message.text = error;
             Debug.Log("error:" + error);
             Debug.Log("useruuid:" + useruuid);
@@ -90,4 +119,3 @@ public class CreateRoomButtonScript : MonoBehaviour
 
     }
 }
-

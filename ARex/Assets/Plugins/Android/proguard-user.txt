@@ -15,9 +15,6 @@
                     -keep class com.google.android.gms.tasks.** { *; }
 
 ### Module Progurad Rules ends ###
-<<<<<<< HEAD
-=======
->>>>>>> ea61c2aca2179d6b79eb1d54ba00c6c1c4157bbe
 
 ### Module Progurad Rules starts ###
 

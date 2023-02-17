@@ -14,12 +14,6 @@ public class JoinRoomButtonScript : MonoBehaviour
     public TextMeshProUGUI room_number; // Textオブジェクト
     string room_number_str;
 
-    public void Start()
-    {
-
-    }
-
-
     public void OnClickJoinRoomButton()
     {
         // ルーム番号を取得
@@ -64,9 +58,13 @@ public class JoinRoomButtonScript : MonoBehaviour
 
         // レスポンス取得
         Debug.Log(request.downloadHandler.text);
-        string judge = request.downloadHandler.text;
+        // レスポンスをパース
+        string[] arr = request.downloadHandler.text.Split(',');
+        // True or False を judge に格納
+        string judge = arr[0];
 
         // True or False で処理を分岐
+        // return なし
         if (judge == "True")
         {
             Debug.Log("Match!!");

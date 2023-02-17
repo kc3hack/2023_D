@@ -17,11 +17,11 @@ def roomleave():
 
     # 不正なユーザーのとき
     if (user == None):
-        return 'False,NOT found user'
+        return 'False, NOT found user'
 
     # オーナーであるとき
     if (user.room != None):
-        return 'False,delete room for leaving this room'
+        return 'False, delete room for leaving this room'
 
     # オーナーではない(RoomMenberであるとき)
     room_members = user.room_member
@@ -38,4 +38,4 @@ def roomleave():
 
     # ユーザー登録はされているがオーナーでもメンバーでもないとき
     else:
-        return 'False,Caution! unexpected commit'
+        return 'False, Caution! unexpected commit'

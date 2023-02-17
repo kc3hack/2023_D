@@ -13,17 +13,16 @@ def roomdelete():
     data = get_json()
 
     user_uuid = data['user_uuid']
-
     user = User.query.filter_by(uuid=user_uuid).first()
 
     if(user==None):
         return 'False, NOT found user'
-    
+
     room=user.room
-    
+
     if(room==None):
         return 'False, you are NOT owner'
-    
+
     #オーナーである場合
     else:
         # エラーが出たらロールバック
@@ -35,5 +34,3 @@ def roomdelete():
         except Exception as e:
             db.session.rollback()
             return 'False,' + str(type(e).__name__)
-        
-        

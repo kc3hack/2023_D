@@ -12,11 +12,11 @@ def room_polling():
     user = User.query.filter_by(uuid=user_uuid).first()
 
     if (user is None):
-        return 'False,NOT found user'
+        return 'False, NOT found user'
 
     room = get_room_by_user(user)
     if (room is None):
-        return 'False,Not found room'
+        return 'False, Not found room'
 
     owner = room.user
     member_list = []
