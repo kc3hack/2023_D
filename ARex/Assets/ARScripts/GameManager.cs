@@ -6,6 +6,7 @@ using System.Runtime.Remoting.Contexts;
 using System.Security.Policy;
 using System.Text;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -26,7 +27,10 @@ public class GameManager : MonoBehaviour
     private int lastselectindex = 0;
     private Vector2 lastDirection=new Vector2(0.2f,0.9f);
     private bool counting = false;
-    private string[] pintype=new string[8];
+    private string[] pintype=new string[8] {"go","enemy","item","attack","go2","defend","watch","trace" };
+    private AudioSource audioSource;
+    public AudioClip audioClip;
+    public AudioClip kurukuru;
     [Serializable]
     private sealed class PinData
     {
@@ -40,16 +44,17 @@ public class GameManager : MonoBehaviour
     [Serializable]
     private sealed class PinAddData
     {
-        public string useruuid = "none";
-        public double longuitude = 0;
-        public double latitude = 0;
-        public double altitude = 0;
+        public string user_uuid = "none";
+        public string longuitude = "0";
+        public string latitude = "0";
+        public string altitude = "0";
         public string pin_type = "go";
 
     }
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        audioSource = GetComponent<AudioSource>();
         error_message = error_message.GetComponent<TextMeshProUGUI>();
         // 1秒おきにループ
         while (true)
@@ -93,28 +98,18 @@ public class GameManager : MonoBehaviour
                 // True or False を judge に格納
                 string judge = arr[0];
 
-                // “True,部屋番号,メンバーの数,メンバー1(ホスト),メンバー2(メンバー)”（True時部屋参加）
-                // “False,エラーメッセージ”（False時部屋退出）??
 
                 // True or False で処理を分岐
                 if (judge == "True")
                 {
-                    // arr[1] = room_number
-                    // arr[2] = メンバーの数
-                    // arr[3] = メンバー1(ホスト)
-                    // arr[4] = メンバー2(メンバー)
-                    // (ry
+                    //“True,リアクションの数,reaction1を発したユーザー名,
+                    //reaction1の内容(okなど),reaction1の対象(pinuuid),
+                    //reaction2を発したユーザー名,reaction2の内容(okなど),
+                    //reaction2の対象(pinuuid),......
+
                     Debug.Log("connecting!");
                     Debug.Log("UUID:" + useruuid);
-                    // 以下にメンバー表示処理を書く
-                    int mom = Convert.ToInt32(arr[2]);
-
-                    string[] namelist = new string[mom];
-                    for (int i = 0; i < mom; i++)
-                    {
-                        namelist[i] = arr[i + 3];
-                    }
-                    // Contentの子要素を全削除
+                    // 以下に処理を書く
 
                    
                 }
@@ -131,7 +126,7 @@ public class GameManager : MonoBehaviour
             {
                 // エラー処理
                 string error = "invalid return value";
-                error_message.text = error;
+                //error_message.text = error;
                 Debug.Log("error:" + error);
             }
 
@@ -151,10 +146,10 @@ public class GameManager : MonoBehaviour
        
         var data = new PinAddData();
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
-        data.useruuid = useruuid;
-        data.latitude = latitude;
-        data.longuitude = longitude;
-        data.altitude = altitude;
+        data.user_uuid = useruuid;
+        data.latitude = latitude.ToString();
+        data.longuitude = longitude.ToString();
+        data.altitude = altitude.ToString();
         data.pin_type = pintype[pintypeid];
         
         var json = JsonUtility.ToJson(data);
@@ -235,6 +230,7 @@ public class GameManager : MonoBehaviour
         //Debug.Log(selectradius.ToString());
         int selectindex = (int)((Math.Floor(selectradius / 45) + 8) % 8);
         Debug.Log(selectindex);
+        if(lastselectindex!=selectindex)audioSource.PlayOneShot(kurukuru);
         lastselectindex= selectindex;
         circlemask.transform.rotation= Quaternion.Euler(0,0, -45 * selectindex);
         var earthTrackingState = EarthManager.EarthTrackingState;
@@ -278,7 +274,7 @@ public class GameManager : MonoBehaviour
         var altitude = EarthManager.CameraGeospatialPose.Altitude;
         var longitude = EarthManager.CameraGeospatialPose.Longitude;
         StartCoroutine(addpin(latitude,longitude,altitude,index));
-
+        audioSource.PlayOneShot(audioClip);
     }
 }
 

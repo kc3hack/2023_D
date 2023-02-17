@@ -64,8 +64,9 @@ public class JoinRoomButtonScript : MonoBehaviour
 
         // レスポンス取得
         Debug.Log(request.downloadHandler.text);
-        string judge = request.downloadHandler.text;
-
+        string[] arr = request.downloadHandler.text.Split(',');
+        // True or False を judge に格納
+        string judge = arr[0];
         // True or False で処理を分岐
         if (judge == "True")
         {
@@ -75,7 +76,17 @@ public class JoinRoomButtonScript : MonoBehaviour
         else
         {
             Debug.Log("NoMatch ; ;");
-            SceneManager.LoadScene("NoMatchScene");
+            Debug.Log(request.downloadHandler.text.IndexOf("YOU ARE OWNER"));
+            if (request.downloadHandler.text.IndexOf("YOU ARE OWNER") != -1)
+            {
+                Debug.Log("You can login");
+                SceneManager.LoadScene("MemberListScene");
+            }
+            else
+            {
+                SceneManager.LoadScene("NoMatchScene");
+            }
+            
         }
 
     }
