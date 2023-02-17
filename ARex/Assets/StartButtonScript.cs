@@ -8,10 +8,29 @@ public class StartButtonScript : MonoBehaviour
 {
     public void OnClickStartButton()
     {
-        // uuidを削除する
-        PlayerPrefs.DeleteAll();
-        Debug.Log("del all PlayerPrefs");
-        // LoginSceneに遷移
-        SceneManager.LoadScene("LoginScene");
+        // roomid load
+        var roomnumber = PlayerPrefs.GetString("Roomnumber", "");
+        // uuid load
+        var useruuid = PlayerPrefs.GetString("Useruuid", "");
+        if (useruuid != "")
+        {
+            if (roomnumber != "")
+            {
+                SceneManager.LoadScene("MemberListScene");
+            }
+            else
+            {
+                // uuidを削除する
+                // PlayerPrefs.DeleteAll();
+                // Debug.Log("del all PlayerPrefs");
+                // RoomListSceneに遷移
+                SceneManager.LoadScene("RoomListScene");
+            }
+        }
+        else
+        {
+            // LoginSceneに遷移
+            SceneManager.LoadScene("LoginScene");
+        }
     }
 }
