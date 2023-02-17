@@ -39,7 +39,7 @@ def pinadd():
         uuid=pin_uuid,
         created_at=datetime.now(pytz.timezone('Asia/Tokyo')),
         user_id=user.id,
-        roon_id=user.room.id
+        roo_id=user.room.id
     )
 
     if (user.pin != None):
