@@ -11,5 +11,4 @@ class Reaction(db.Model):
     pin = db.relationship("Pin",back_populates="reactions")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone('Asia/Tokyo')))
     content = db.Column(db.String)
-    
-    
+    to_user_id = db.Column(db.Integer,nullable=False)

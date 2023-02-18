@@ -10,3 +10,4 @@ class Room(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, unique=True)
     user = db.relationship("User", back_populates="room")
     room_members = db.relationship("RoomMember", uselist=True, back_populates="room", cascade="all, delete, delete-orphan")
+    pins = db.relationship("Pin", uselist=True, back_populates="room", cascade="all, delete, delete-orphan")

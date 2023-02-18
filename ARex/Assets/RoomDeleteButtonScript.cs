@@ -11,13 +11,7 @@ using TMPro;
 // RoomDelete時の処理(ホスト限定)
 public class RoomDeleteButtonScript : MonoBehaviour
 {
-    public TextMeshProUGUI error_message; // Textオブジェクト
-
-    public void Start()
-    {
-
-    }
-
+    public Text error_message; // Textオブジェクト
 
     public void OnClickRoomDeleteButton()
     {
@@ -65,7 +59,7 @@ public class RoomDeleteButtonScript : MonoBehaviour
         else
         {
             string error = arr[1];
-            error_message = error_message.GetComponent<TextMeshProUGUI>();
+            error_message = error_message.GetComponent<Text>();
             error_message.text = error;
             Debug.Log("error:" + error);
         }

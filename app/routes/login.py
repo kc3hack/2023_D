@@ -13,7 +13,7 @@ def login():
 
     user = User.query.filter_by(name=username).first()
     if user is None:
-        return 'False,NOT found user'
+        return 'False, NOT found user'
 
     if user.password == userpassword:
         return 'True,' + user.uuid
