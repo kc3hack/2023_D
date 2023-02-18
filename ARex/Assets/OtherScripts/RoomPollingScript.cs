@@ -18,6 +18,7 @@ public class RoomPollingScript : MonoBehaviour
     // メンバー表示用
     public RectTransform content_;
     public GameObject item_prefab_;
+    public GameObject item_prefab_2;
 
     // json data
     [Serializable]
@@ -101,11 +102,22 @@ public class RoomPollingScript : MonoBehaviour
                     // リストの要素数分Itemを生成
                     for (int i = 0; i < mom; i++)
                     {
-                        // content_にitem_prefab_をインスタンス化
-                        var item = Instantiate(item_prefab_, content_);
-                        // item_objの子要素のTextを取得
-                        var item_text = item.GetComponentInChildren<Text>();
-                        item_text.text = namelist[i];
+                        if (i % 2 == 0)
+                        {
+                            // content_にitem_prefab_をインスタンス化
+                            var item = Instantiate(item_prefab_, content_);
+                            // item_objの子要素のTextを取得
+                            var item_text = item.GetComponentInChildren<Text>();
+                            item_text.text = namelist[i];
+                        }
+                        else
+                        {
+                            // content_にitem_prefab_をインスタンス化
+                            var item2 = Instantiate(item_prefab_2, content_);
+                            // item_objの子要素のTextを取得
+                            var item_text_2 = item2.GetComponentInChildren<Text>();
+                            item_text_2.text = namelist[i];
+                        }
                     }
                     content_.GetComponent<RectTransform>().sizeDelta = new Vector2(0, mom * 50);
                 }
