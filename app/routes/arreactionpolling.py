@@ -14,10 +14,9 @@ def arreactionpolling():
     data = get_json()
 
     user_uuid = data['user_uuid']
-    pin_uuid = data['pin_uuid']
 
     user = User.query.filter_by(uuid=user_uuid).first()
-    pin = Pin.query.filter_by(uuid=pin_uuid).first()
+    pin = user.pin
 
     # 不正なユーザーの場合
     if (user == None):
