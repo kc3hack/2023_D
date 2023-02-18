@@ -27,9 +27,14 @@ def pinadd():
     if (user == None):
         return 'False, NOT found user'
 
-    typelist = ['go','enemy','item','attack','go2','defend','watch','trace']  
+    typelist = ['go', 'enemy', 'item', 'attack', 'go2', 'defend', 'watch', 'trace']
     if (pin_type not in typelist):
         return 'False, NOT found pin'
+
+    room = get_room_by_user(user)
+
+    if (room is None):
+        return 'False, Not enter room'
 
     pin = Pin(
         altitude=altitude,
@@ -39,7 +44,7 @@ def pinadd():
         uuid=pin_uuid,
         created_at=datetime.now(pytz.timezone('Asia/Tokyo')),
         user_id=user.id,
-        room_id=user.room.id
+        room_id=room.id
     )
 
     if (user.pin != None):
@@ -59,3 +64,12 @@ def pinadd():
     except Exception as e:
         db.session.rollback()
         return 'False,' + str(type(e).__name__)
+
+
+def get_room_by_user(user):
+    if user.room is not None:
+        return user.room
+    if user.room_member is not None:
+        return user.room_member.room
+    else:
+        return None
