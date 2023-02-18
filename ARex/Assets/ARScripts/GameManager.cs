@@ -1,36 +1,61 @@
-using Google.XR.ARCoreExtensions;
+ï»¿using Google.XR.ARCoreExtensions;
+using Google.XR.ARCoreExtensions.Samples.Geospatial;
+using Mathd;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.Remoting.Contexts;
 using System.Security.Policy;
 using System.Text;
 using TMPro;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using Image = UnityEngine.UI.Image;
+using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
+public enum PinType
+{
+    go=0, enemy=1, item=2, attack=3, go2=4, defend=5, watch=6, trace=7
+}
+
+public enum ReactionType
+{
+    ok=0,no=1,unable=2,stop=3
+}
 
 public class GameManager : MonoBehaviour
 {
     public AREarthManager EarthManager;
     public ARAnchorManager AnchorManager;
-    public List<Marker> markers = new List<Marker>();//ƒ}[ƒJ[(pin)‚ÌêŠ
-    public TextMeshProUGUI error_message; // TextƒIƒuƒWƒFƒNƒg
+    public List<Marker> markers = new List<Marker>();//ãƒãƒ¼ã‚«ãƒ¼(pin)ã®å ´æ‰€
+    public TextMeshProUGUI error_message; // Textã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     public float span = 1f;//polling second
     public FixedJoystick joystick;
     public Image circlemask;
+    public Image logocircle;
+    public GameObject PinPrefab;
     private int zerocount = 0;
     private int kurukurucount = 0;
     private int lastselectindex = 0;
-    private Vector2 lastDirection=new Vector2(0.2f,0.9f);
+    private Vector2 lastDirection =new Vector2(0.2f,0.9f);
     private bool counting = false;
     private string[] pintype=new string[8] {"go","enemy","item","attack","go2","defend","watch","trace" };
     private AudioSource audioSource;
     public AudioClip audioClip;
     public AudioClip kurukuru;
+    public Scrollbar slider;
+    public List<AnchorData> naiteki= new List<AnchorData>();
+
     [Serializable]
     private sealed class PinData
     {
@@ -39,6 +64,30 @@ public class GameManager : MonoBehaviour
     }
 
     
+
+    [Serializable]
+    public class AnchorData
+    {
+        public string pin_uuid = "none";
+        public string user_name = "none";
+        public double latitude = 0;
+        public double longitude = 0;
+        public double altitude = 0;
+        public PinType pinType = PinType.go;
+        public bool spawned = false;
+        public ARGeospatialAnchor anchor;
+        public GameObject pinprefab;
+    }
+
+    [Serializable]
+    public class ReactionData
+    {
+        public string pin_uuid = "none";
+        public string user_name = "none";
+        public ReactionType reactionType = ReactionType.ok;
+        public bool spawned = false;
+    }
+
 
 
     [Serializable]
@@ -54,21 +103,28 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        circlemask.color = new Color(0, 0, 0, 0);
+        logocircle.color = new Color(0, 0, 0, 0);
         audioSource = GetComponent<AudioSource>();
         error_message = error_message.GetComponent<TextMeshProUGUI>();
-        // 1•b‚¨‚«‚Éƒ‹[ƒv
+        
+        //var jikakukarakita100m = calcdimention(34.64910503367887, 135.58416437641043, 90, 100);
+        //Debug.Log(jikakukarakita100m.ToString());
+
+        // 1ç§’ãŠãã«ãƒ«ãƒ¼ãƒ—
         while (true)
         {
-            // ƒ‹[ƒvˆ—
+            // ãƒ«ãƒ¼ãƒ—å‡¦ç†
             yield return new WaitForSeconds(span);
-            Debug.LogFormat("{0}•bŒo‰ß", span);
-            Debug.Log("apiŠJn");
+            Debug.LogFormat("{0}ç§’çµŒé", span);
+            Debug.Log("apié–‹å§‹");
 
-            // ƒŠƒNƒGƒXƒgì¬
-            // uuidƒ[ƒh
+            // ãƒªã‚¯ã‚¨ã‚¹ãƒˆä½œæˆ
+            // uuidãƒ­ãƒ¼ãƒ‰
             var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
             var roomnumber = PlayerPrefs.GetString("Roomnumber", "");
             var url = "http://itoho.ddns.net:5000/arpinpolling";
+            var ur2 = "http://itoho.ddns.net:5000/arreactionpolling";
             var data = new PinData();
             data.user_uuid = useruuid;
             data.room_number = roomnumber;
@@ -85,46 +141,150 @@ public class GameManager : MonoBehaviour
             request.SetRequestHeader("Content-Type", "application/json");
             request.timeout = 1;
 
-            // ƒŠƒNƒGƒXƒg‘—M
+            // ãƒªã‚¯ã‚¨ã‚¹ãƒˆé€ä¿¡
             yield return request.SendWebRequest();
+            using var request2 = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST)
+            {
+                uploadHandler = new UploadHandlerRaw(postData),
+                downloadHandler = new DownloadHandlerBuffer()
+            };
 
-            // ƒŒƒXƒ|ƒ“ƒXóM
+            request2.SetRequestHeader("Content-Type", "application/json");
+            request2.timeout = 1;
+            yield return request2.SendWebRequest();
+
+
+
+
+            // ãƒ¬ã‚¹ãƒãƒ³ã‚¹å—ä¿¡
             Debug.Log(request.downloadHandler.text);
-            // ƒŒƒXƒ|ƒ“ƒX‚ğˆ—
+            // ãƒ¬ã‚¹ãƒãƒ³ã‚¹ã‚’å‡¦ç†
             try
             {
-                // ƒŒƒXƒ|ƒ“ƒX‚ğƒp[ƒX
+                // ãƒ¬ã‚¹ãƒãƒ³ã‚¹ã‚’ãƒ‘ãƒ¼ã‚¹
                 string[] arr = request.downloadHandler.text.Split(',');
-                // True or False ‚ğ judge ‚ÉŠi”[
+                // True or False ã‚’ judge ã«æ ¼ç´
                 string judge = arr[0];
 
 
-                // True or False ‚Åˆ—‚ğ•ªŠò
+                // True or False ã§å‡¦ç†ã‚’åˆ†å²
                 if (judge == "True")
                 {
-                    //gTrue,ƒŠƒAƒNƒVƒ‡ƒ“‚Ì”,reaction1‚ğ”­‚µ‚½ƒ†[ƒU[–¼,
-                    //reaction1‚Ì“à—e(ok‚È‚Ç),reaction1‚Ì‘ÎÛ(pinuuid),
-                    //reaction2‚ğ”­‚µ‚½ƒ†[ƒU[–¼,reaction2‚Ì“à—e(ok‚È‚Ç),
-                    //reaction2‚Ì‘ÎÛ(pinuuid),......
 
-                    Debug.Log("connecting!");
-                    Debug.Log("UUID:" + useruuid);
-                    // ˆÈ‰º‚Éˆ—‚ğ‘‚­
+                    //â€œTrue,ãƒ”ãƒ³ã®æ•°,ãƒ”ãƒ³1ã®ç¨®é¡,ãƒ”ãƒ³1ã®UUID,ãƒ”ãƒ³ï¼‘ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼å,ãƒ”ãƒ³1ã®ç·¯åº¦,ãƒ”ãƒ³1ã®
+                    //çµŒåº¦,ãƒ”ãƒ³1ã®é«˜ã•,ãƒ”ãƒ³2ã®ç¨®é¡,ãƒ”ãƒ³2ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼å,ãƒ”ãƒ³2ã®UUID,ãƒ”ãƒ³2ã®ç·¯åº¦,ãƒ”ãƒ³2ã®çµŒåº¦,ãƒ”ãƒ³2ã®é«˜ã•....
 
-                   
+                    // ä»¥ä¸‹ã«å‡¦ç†ã‚’æ›¸ã
+                    
+                    int anchornum = int.Parse(arr[1]);
+                    Debug.Log("True,response"+anchornum);
+                    if (anchornum == 0) continue;
+                    List<AnchorData> responseanchor=new List<AnchorData>();
+                    for(int i = 0; i < anchornum; i++)
+                    {
+                        AnchorData tmp=new AnchorData();
+                        tmp.pinType = (PinType)Enum.Parse(typeof(PinType), arr[2 + i * 6]);
+                        tmp.pin_uuid = arr[2 + 1 + i * 6];
+                        tmp.user_name = arr[2 + 2 + i * 6];
+                        tmp.latitude = double.Parse( arr[2 + 3 + i * 6]);
+                        tmp.longitude = double.Parse(arr[2 + 4 + i * 6]);
+                        tmp.altitude = double.Parse(arr[2 + 5 + i * 6]);
+                        tmp.spawned = false;
+                        responseanchor.Add(tmp);
+                        //naiteki.Add(tmp);
+                        Debug.Log(tmp.pinType);
+                    }
+                    //add
+                    foreach (AnchorData anchor in responseanchor)
+                    {
+                        bool addyotei = true;
+                        foreach (AnchorData already in naiteki)
+                        {
+                            if (already.pin_uuid.Equals(anchor.pin_uuid))
+                            {
+                                addyotei = false;
+                            }
+                        }
+
+                        if (addyotei)
+                        {
+                            naiteki.Add(anchor);
+                            
+                            
+                        }
+
+                    }
+
+                    foreach (AnchorData anchor in naiteki)
+                    {
+                        bool deleteyotei = true;
+                        foreach (AnchorData already in responseanchor)
+                        {
+                            if (already.pin_uuid.Equals(anchor.pin_uuid))
+                            {
+                                deleteyotei = false;
+                            }
+                        }
+
+                        if (deleteyotei)
+                        {
+                            anchor.anchor.enabled= false;
+                            Destroy(anchor.pinprefab);
+                            naiteki.Remove(anchor);
+
+
+                        }
+
+                    }
+
                 }
                 else
                 {
-                    // ƒGƒ‰[ˆ—
+                    // ã‚¨ãƒ©ãƒ¼å‡¦ç†
                     string error = arr[1];
                     error_message.text = error;
                     Debug.Log("error:" + error);
                     // SceneManager.LoadScene("RoomListScene");
                 }
-            }
+
+
+
+
+                arr = request2.downloadHandler.text.Split(',');
+                // True or False ã‚’ judge ã«æ ¼ç´
+                judge = arr[0];
+
+
+                if (judge == "True")
+                {
+
+                    //â€œTrue,ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®æ•°,reaction1ã‚’ç™ºã—ãŸãƒ¦ãƒ¼ã‚¶ãƒ¼å,reaction1ã®å†…å®¹(okãªã©),reaction1ã®å¯¾è±¡(pinuuid),reaction2ã‚’ç™ºã—ãŸãƒ¦ãƒ¼ã‚¶ãƒ¼å,reaction2ã®å†…å®¹(okãªã©),reaction2ã®å¯¾è±¡(pinuuid),......
+                    //å‰å›ãƒãƒ¼ãƒªãƒ³ã‚°ã‹ã‚‰ï¼‘ç§’ä»¥å†…ã«èª°ã‚‚ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã—ãªã‹ã£ãŸå ´åˆã€
+
+
+
+                    int anchornum = int.Parse(arr[1]);
+                    Debug.Log("True,response" + anchornum);
+                    if (anchornum == 0) continue;
+                    //List<Reac> responseanchor = new List<AnchorData>();
+                    for (int i = 0; i < anchornum; i++)
+                    {
+                        ReactionData tmp = new ReactionData();
+                        tmp.user_name = arr[1 + 1 + i * 3];
+                        tmp.pin_uuid = arr[2 + 1 + i * 3];
+                        tmp.reactionType = (ReactionType)Enum.Parse(typeof(ReactionType), arr[2 + i * 3]);
+                        tmp.spawned = false;
+                        //responseanchor.Add(tmp);
+                        //naiteki.Add(tmp);
+                        //Debug.Log(tmp.);
+                    }
+                }
+
+
+                }
             catch
             {
-                // ƒGƒ‰[ˆ—
+                // ã‚¨ãƒ©ãƒ¼å‡¦ç†
                 string error = "invalid return value";
                 //error_message.text = error;
                 Debug.Log("error:" + error);
@@ -136,19 +296,21 @@ public class GameManager : MonoBehaviour
 
 
     [System.Obsolete]
-    IEnumerator addpin(double latitude,double longitude,double altitude,int pintypeid)
+    IEnumerator addpin(double latitude,double longitude,double altitude,double houkou,double kyori,int pintypeid)
     {
         var earthTrackingState = EarthManager.EarthTrackingState;
-        if (earthTrackingState != TrackingState.Tracking)//ˆÊ’uî•ñ‚ªæ“¾‚Å‚«‚È‚©‚Á‚½‚ç
+        if (earthTrackingState != TrackingState.Tracking)//ä½ç½®æƒ…å ±ãŒå–å¾—ã§ããªã‹ã£ãŸã‚‰
         {
             error_message.text = "not enough GPS accuracy";
+            //yield break;
         }
-       
+        
         var data = new PinAddData();
         var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
         data.user_uuid = useruuid;
-        data.latitude = latitude.ToString();
-        data.longuitude = longitude.ToString();
+        Vector2d vector2= calcdimention(latitude,longitude,houkou, (int)kyori);
+        data.latitude = vector2.x.ToString("f16");
+        data.longuitude = vector2.y.ToString("f16");
         data.altitude = altitude.ToString();
         data.pin_type = pintype[pintypeid];
         
@@ -165,10 +327,10 @@ public class GameManager : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
         request.timeout = 1;
 
-        // ƒŠƒNƒGƒXƒg‘—M
+        // ãƒªã‚¯ã‚¨ã‚¹ãƒˆé€ä¿¡
         yield return request.SendWebRequest();
 
-        // ƒŒƒXƒ|ƒ“ƒXóM
+        // ãƒ¬ã‚¹ãƒãƒ³ã‚¹å—ä¿¡
         Debug.Log(request.downloadHandler.text);
         if (request.isNetworkError || request.isHttpError)
         {
@@ -195,12 +357,69 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void removeallanchor()
+    {
+        foreach(AnchorData anchor in naiteki)
+        {
+            
+            anchor.anchor.enabled = false;
+            naiteki.Remove(anchor);
+        }
+    }
+
+    public void OnClickJoinButton()
+    {
+        // uuidãƒ­ãƒ¼ãƒ‰
+        var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
+        Debug.Log("UUID:" + useruuid);
+        SceneManager.LoadScene("MemberListScene");
+    }
+
 
     // Update is called once per frame
     void Update()
     {
-        
-        if(joystick.Direction== Vector2.zero) {
+        if(EarthManager.EarthTrackingState == TrackingState.Tracking)
+        {
+            foreach (AnchorData anchor in naiteki)
+            {
+                if (anchor.spawned == false)
+                {
+                    Quaternion quaternion =
+                   Quaternion.AngleAxis(180f - (float)0, UnityEngine.Vector3.up);
+                     var tmp=  AnchorManager.AddAnchor(anchor.latitude,anchor.longitude, anchor.altitude, quaternion);
+                    //var a = GetComponent<ARGeospatialAnchor>();
+                    if (tmp != null)
+                    {
+                        var pinPrefab = Instantiate(PinPrefab, tmp.transform);
+                        anchor.pinprefab= pinPrefab;
+                        anchor.anchor = tmp;
+                        var pinscript = anchor.pinprefab.GetComponent<Pinscript>();
+                        if (pinscript != null)
+                        {
+                            pinscript.Setpin_uuid(anchor.pin_uuid);
+                            pinscript.Setuser_name(anchor.user_name);
+                            pinscript.Setpintype(anchor.pinType);
+                            pinscript.setup();
+
+                            error_message.text = "add pinscript setup";
+                        }
+                        else
+                        {
+                            error_message.text = "error pinscript error";
+                        }
+                        anchor.spawned = true;
+                    }
+                    //a.
+                    
+                    //pinscript.set
+                    
+                }
+            }
+        }
+
+        //Debug.Log(zerocount);
+        if (joystick.Direction== Vector2.zero) {
             if(counting) zerocount++;
 
             if (zerocount >= 10)
@@ -208,31 +427,44 @@ public class GameManager : MonoBehaviour
                 zerocount= 0;
                 counting = false;
                 circlemask.color= new Color(0,0,0,0);
-                if(lastDirection.magnitude > 0.6)
+                logocircle.color = new Color(0, 0, 0, 0);
+
+                if (lastDirection.magnitude > 0.6)
                 {
+                    lastDirection = Vector2.zero;
                     PushPinButton(lastselectindex);
+                    return;
                 }
                 else
                 {
+                    lastDirection = Vector2.zero;
                     PushPinButton(0);
+                    return;
                 }
-                
+
+            }
+            else
+            {
+                return;
             }
             return;
         }
         counting = true;
+        
         if (joystick.Direction.magnitude>0.6) {
+            zerocount = 0;
             lastDirection = joystick.Direction;
             kurukurucount++;
             circlemask.color = new Color(0, 0, 0, 0.5f);
+            logocircle.color = new Color(255, 255, 255, 1f);
         }
-        var selectradius = Mathf.Atan2( joystick.Direction.x,joystick.Direction.y) * Mathf.Rad2Deg;
+        var selectradius = Mathf.Atan2( joystick.Direction.x,joystick.Direction.y) * Mathf.Rad2Deg + 22.5;
         //Debug.Log(selectradius.ToString());
         int selectindex = (int)((Math.Floor(selectradius / 45) + 8) % 8);
         Debug.Log(selectindex);
-        if(lastselectindex!=selectindex)audioSource.PlayOneShot(kurukuru);
-        lastselectindex= selectindex;
-        circlemask.transform.rotation= Quaternion.Euler(0,0, -45 * selectindex);
+        if(lastselectindex!=selectindex && joystick.Direction.magnitude > 0.6) audioSource.PlayOneShot(kurukuru);
+        if(joystick.Direction.magnitude > 0.6) lastselectindex= selectindex;
+        circlemask.transform.rotation= Quaternion.Euler(0,0, -45 * selectindex + 22.5f);
         var earthTrackingState = EarthManager.EarthTrackingState;
         if (earthTrackingState == TrackingState.Tracking)
         {
@@ -247,33 +479,85 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void PushPinButton()
-    {
-        var earthTrackingState = EarthManager.EarthTrackingState;
-        if (earthTrackingState == TrackingState.Tracking)
-        {
-            Quaternion quaternion =
-                   Quaternion.AngleAxis(180f - (float)0, Vector3.up);
-            var pose = EarthManager.EarthState == EarthState.Enabled &&
-                EarthManager.EarthTrackingState == TrackingState.Tracking ?
-                EarthManager.CameraGeospatialPose : new GeospatialPose();
-            var anchor = AnchorManager.AddAnchor(pose.Latitude, pose.Longitude, pose.Altitude, quaternion);
+    
 
-            if (anchor != null)
-            {
-                Debug.Log("add anchor");
+    private double ToRadian(double angle)
+    {
+        return (double)(angle * Math.PI / 180);
+    }
+
+    private double ToDegree(double radian)
+    {
+        return (double)(radian * 180 / Math.PI);
+    }
+
+
+    public Vector2d calcdimention(double latitude,double longitude,double houkou,int distance)
+    {
+        double a = 6378137.0;//é•·è»¸åŠå¾„
+        double f = 1 / 298.257223563;//æ‰å¹³ç‡
+        double b = (1 - f) * a;
+        double c1 = ToRadian(latitude);
+        double c2= ToRadian(longitude);
+        double c3= ToRadian(houkou);
+        double sina1= Math.Sin(c3);
+        double cosa1= Math.Cos(c3);
+        // æ›´æˆç·¯åº¦(è£œåŠ©çƒä¸Šã®ç·¯åº¦)
+        double U1 = Math.Atan((1 - f) * Math.Tan(c1));
+        double sinU1=Math.Sin(U1);
+        double cosU1 = Math.Cos(U1);
+        double tanU1 = Math.Tan(U1);
+        double a1 = Math.Atan2(tanU1, cosa1);
+        double sina = cosU1 * sina1;
+        double cos2a = 1 - sina * sina;
+        double u2 = cos2a * (a * a - b * b) / (b * b);
+        double A = 1 + u2 / 12384 * (4096 + u2 * (-768 + u2 * (320 - 175 * u2)));
+        double B = u2 / 1024 * (256 + u2 * (-128 + u2 * (74 - 47 * u2)));
+
+        double alpha = distance / (b * A);
+
+        double cos2Ïƒm=0 ;
+        double sinÏƒ=0;
+        double cosÏƒ =0;
+        double Î”Ïƒ=0;
+        double ÏƒÊ¹=0;
+
+        for (int i = 0; i < 1000; i++)
+        {
+            cos2Ïƒm = Math.Cos(2 * a1 + alpha);
+            sinÏƒ = Math.Sin(alpha);
+            cosÏƒ = Math.Cos(alpha);
+            Î”Ïƒ = B * sinÏƒ * (cos2Ïƒm + B / 4 * (cosÏƒ * (-1 + 2 * cos2Ïƒm * cos2Ïƒm) - B / 6 * cos2Ïƒm * (-3 + 4 * sinÏƒ * sinÏƒ) * (-3 + 4 * cos2Ïƒm * cos2Ïƒm)));
+            ÏƒÊ¹ = alpha;
+            alpha = distance / (b * A) + Î”Ïƒ;
+            if (Math.Abs(alpha - ÏƒÊ¹) <= 1e-12) { 
+            break;
             }
         }
-    }
+
+            double x = sinU1 * sinÏƒ - cosU1 * cosÏƒ * cosa1;
+            double Ï†2 = Math.Atan2(sinU1 * cosÏƒ + cosU1 * sinÏƒ * cosa1, (1 - f) * Math.Sqrt(sina * sina  + x *x));
+            double Î» = Math.Atan2(sinÏƒ* sina1, cosU1* cosÏƒ - sinU1* sinÏƒ * cosa1);
+            double C = f / 16 * cos2a* (4 + f* (4 - 3 * cos2a));
+            double L = Î» - (1 - C) * f* sina * (alpha + C* sinÏƒ * (cos2Ïƒm + C* cosÏƒ * (-1 + 2 * cos2Ïƒm* cos2Ïƒm)));
+            double Î»2 = L + c2;
+
+            double Î±2 = Math.Atan2(sina, -x) + Math.PI;
+        return new Vector2d(ToDegree(Ï†2), ToDegree(Î»2));
+
+        }
 
     [Obsolete]
     public void PushPinButton(int index)
     {
-        Debug.Log("index" +index);
+        Debug.Log("index" + index);
         var latitude = EarthManager.CameraGeospatialPose.Latitude;
         var altitude = EarthManager.CameraGeospatialPose.Altitude;
         var longitude = EarthManager.CameraGeospatialPose.Longitude;
-        StartCoroutine(addpin(latitude,longitude,altitude,index));
+        var kyori = (int)(slider.value * 300);
+        Debug.Log(kyori.ToString() + "kyori");
+        double hougaku = EarthManager.CameraGeospatialPose.Heading;
+        StartCoroutine(addpin(latitude, longitude, altitude, hougaku, kyori, index));
         audioSource.PlayOneShot(audioClip);
     }
 }
@@ -285,8 +569,8 @@ public class Marker
 {
     public double id;
     public GeospatialPose pose;
-    public bool allive;//¶‚«‚Ä‚¢‚é‚©
-    public bool spawned;//¶¬‚µ‚½‚©
+    public bool allive;//ç”Ÿãã¦ã„ã‚‹ã‹
+    public bool spawned;//ç”Ÿæˆã—ãŸã‹
     public GameObject pinpref;
     public string pinuuid;
     public string type;

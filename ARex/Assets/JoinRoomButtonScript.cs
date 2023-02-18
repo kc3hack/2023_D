@@ -58,10 +58,11 @@ public class JoinRoomButtonScript : MonoBehaviour
 
         // レスポンス取得
         Debug.Log(request.downloadHandler.text);
-        string judge = request.downloadHandler.text;
+        string judge = request.downloadHandler.text.Split(",")[0];
 
         // True or False で処理を分岐
         // return なし
+        SceneManager.LoadScene("MemberListScene");
         if (judge == "True")
         {
             Debug.Log("Match!!");
