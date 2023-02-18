@@ -38,7 +38,7 @@ public class RoomPollingScript : MonoBehaviour
             yield return new WaitForSeconds(span);
             // Debug.LogFormat("{0}秒経過", span);
             // Debug.Log("api開始");
-            
+
             // リクエスト作成
             // uuidロード
             var useruuid = PlayerPrefs.GetString("Useruuid", "");
@@ -56,7 +56,7 @@ public class RoomPollingScript : MonoBehaviour
 
             request.SetRequestHeader("Content-Type", "application/json");
             request.timeout = 1;
-            
+
             // リクエスト送信
             yield return request.SendWebRequest();
 

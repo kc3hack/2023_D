@@ -91,7 +91,7 @@ public class CreateRoomButtonScript : MonoBehaviour
             // レスポンスを配列に格納
             string[] arr = request.downloadHandler.text.Split(',');
             string judge = arr[0];
-        
+
             if (judge == "True")
             {
                 // 待機画面へ
@@ -99,7 +99,7 @@ public class CreateRoomButtonScript : MonoBehaviour
                 SceneManager.LoadScene("MemberListScene");
             }
             else
-            {   
+            {
                 // エラーメッセージ表示
                 string error = arr[1];
                 error_message = error_message.GetComponent<Text>();
@@ -119,4 +119,3 @@ public class CreateRoomButtonScript : MonoBehaviour
 
     }
 }
-

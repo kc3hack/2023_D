@@ -4,7 +4,7 @@ from app.models.user import User
 from app.models.room import Room
 from datetime import datetime
 from app.core import db
-from sqlalchemy.exc import IntegrityError 
+from sqlalchemy.exc import IntegrityError
 import pytz
 
 blueprint = Blueprint('roomcreate', __name__)
@@ -34,10 +34,10 @@ def roomcreate():
             db.session.add(room)
             db.session.commit()
             return 'True'
-        
+
         except IntegrityError:
-            return 'False, the room has ALREADY exist'  
-        
+            return 'False, the room has ALREADY exist'
+
         except Exception as e:
             db.session.rollback()
             return 'False,' + str(type(e).__name__)

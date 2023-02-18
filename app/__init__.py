@@ -24,5 +24,3 @@ app.register_blueprint(reactionadd_blueprint)
 app.register_blueprint(pincancel_blueprint)
 app.register_blueprint(arpinpolling_blueprint)
 app.register_blueprint(arreactionpolling_blueprint)
-
-

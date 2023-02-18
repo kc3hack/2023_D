@@ -8,6 +8,9 @@ public class EnterButtonScript : MonoBehaviour
 {
     public void OnClickJoinButton()
     {
-        SceneManager.LoadScene("ARScene");
+        // uuidロード
+        var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
+        Debug.Log("UUID:" + useruuid);
+        SceneManager.LoadScene("GeospatialAR");
     }
 }
