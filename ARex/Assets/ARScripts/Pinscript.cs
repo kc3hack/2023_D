@@ -54,5 +54,6 @@ public class Pinscript : MonoBehaviour
         transform.LookAt(p);
         float bairitu = (float)(Vector3.Distance(p, plane.transform.position) * 0.005);
         plane.transform.localScale =  Vector3.one * bairitu;
+        textMesh.text = textMesh.text.Split(",")[0]+","+ (int)(Vector3.Distance(p, plane.transform.position))+" m";
     }
 }

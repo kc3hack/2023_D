@@ -21,6 +21,7 @@ using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using Image = UnityEngine.UI.Image;
 using Quaternion = UnityEngine.Quaternion;
+using Random = UnityEngine.Random;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 public enum PinType
@@ -104,11 +105,12 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        
         circlemask.color = new Color(0, 0, 0, 0);
         logocircle.color = new Color(0, 0, 0, 0);
         audioSource = GetComponent<AudioSource>();
         error_message = error_message.GetComponent<TextMeshProUGUI>();
-        
+        //audioSource.PlayOneShot(voices[0]);
         //var jikakukarakita100m = calcdimention(34.64910503367887, 135.58416437641043, 90, 100);
         //Debug.Log(jikakukarakita100m.ToString());
 
@@ -209,6 +211,7 @@ public class GameManager : MonoBehaviour
 
                         if (addyotei)
                         {
+                           // Playnumber(Random.Range(1, 5));
                             naiteki.Add(anchor);
                             
                             
@@ -229,6 +232,7 @@ public class GameManager : MonoBehaviour
 
                         if (deleteyotei)
                         {
+                            Playnumber(Random.Range(53, 56));
                             anchor.anchor.enabled= false;
                             Destroy(anchor.pinprefab);
                             naiteki.Remove(anchor);
@@ -293,6 +297,17 @@ public class GameManager : MonoBehaviour
 
 
         }
+    }
+
+    private void Playnumber(int index)
+    {
+        audioSource.PlayOneShot(voices[index-1]);
+    }
+
+    private IEnumerator Playnumbersleep(int index)
+    {
+        yield return new WaitForSeconds(1.5f);
+        audioSource.PlayOneShot(voices[index - 1]);
     }
 
 
@@ -402,7 +417,36 @@ public class GameManager : MonoBehaviour
                             pinscript.Setuser_name(anchor.user_name);
                             pinscript.Setpintype(anchor.pinType);
                             pinscript.setup();
+                            switch (anchor.pinType)
+                            {
+                                case PinType.go:
+                                    StartCoroutine("Playnumbersleep", Random.Range(1, 6));
+                                    break;
+                                case PinType.enemy:
+                                    StartCoroutine("Playnumbersleep", Random.Range(6, 13));
+                                    break;
+                                case PinType.item:
+                                    StartCoroutine("Playnumbersleep", Random.Range(13, 18));
+                                    break;
+                                case PinType.attack:
+                                    StartCoroutine("Playnumbersleep", Random.Range(18, 29));
+                                    break;
+                                case PinType.go2:
+                                    StartCoroutine("Playnumbersleep", Random.Range(29, 34));
+                                    break;
+                                case PinType.defend:
+                                    StartCoroutine("Playnumbersleep", Random.Range(34, 40));
+                                    break;
+                                case PinType.watch:
+                                    StartCoroutine("Playnumbersleep", Random.Range(40, 44));
+                                    break;
+                                case PinType.trace:
+                                    StartCoroutine("Playnumbersleep", Random.Range(44, 53));
 
+                                    break;
+                                default:
+                                    break;
+                            }
                             error_message.text = "add pinscript setup";
                         }
                         else
