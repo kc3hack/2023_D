@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9b9461dc2ee526e489bad2abceb730c6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fe1a9e4bd43d2d4499a45356d9507964, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -166,7 +166,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6735173734997434768}
   m_Layer: 5
-  m_Name: ListViewItem
+  m_Name: ListViewItem2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

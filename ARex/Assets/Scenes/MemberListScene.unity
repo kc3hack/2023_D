@@ -291,7 +291,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.42352942, g: 0.8666667, b: 0.8862745, a: 0.392}
+  m_Color: {r: 0.99607843, g: 1, b: 0.9647059, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -509,6 +509,7 @@ MonoBehaviour:
   error_message: {fileID: 1185486903}
   content_: {fileID: 452434002}
   item_prefab_: {fileID: 6973078196778875946, guid: b3f988595261ceb48aef9cb8d72ee0cd, type: 3}
+  item_prefab_2: {fileID: 6973078196778875946, guid: 180483fd5b2206f4f871f97d18ff8ffc, type: 3}
 --- !u!1 &236829699
 GameObject:
   m_ObjectHideFlags: 0
@@ -1033,7 +1034,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
+    m_Left: 3
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
@@ -3425,7 +3426,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6735173734997434768, guid: b3f988595261ceb48aef9cb8d72ee0cd, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 240
+      value: 234
       objectReference: {fileID: 0}
     - target: {fileID: 6735173734997434768, guid: b3f988595261ceb48aef9cb8d72ee0cd, type: 3}
       propertyPath: m_SizeDelta.y
