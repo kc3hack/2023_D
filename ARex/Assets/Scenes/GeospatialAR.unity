@@ -2889,10 +2889,11 @@ MonoBehaviour:
   joystick: {fileID: 2929252284223760515}
   circlemask: {fileID: 1272476963}
   logocircle: {fileID: 2131484387}
-  PinPrefab: {fileID: 2876337610998918971, guid: e7af56751de8aaa43a32034b9ad7734d, type: 3}
+  PinPrefab: {fileID: 6504236829544631448, guid: 8f254f221356a4e4f873619ab1509098, type: 3}
   audioClip: {fileID: 8300000, guid: 74a08ccea4ec28348bb8818e8e7df412, type: 3}
   kurukuru: {fileID: 8300000, guid: 05989758a6daa63409e26ad3ee73ad3f, type: 3}
   slider: {fileID: 212177545}
+  arcamera: {fileID: 1451910691}
   naiteki: []
   voices:
   - {fileID: 8300000, guid: 3b8f87bcfcf80094880f7a961b770990, type: 3}

@@ -4,6 +4,7 @@ using Mathd;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.Remoting.Contexts;
 using System.Security.Policy;
@@ -55,8 +56,15 @@ public class GameManager : MonoBehaviour
     public AudioClip audioClip;
     public AudioClip kurukuru;
     public Scrollbar slider;
+    public Camera arcamera;
     public List<AnchorData> naiteki= new List<AnchorData>();
+    public List<ReactionData> testdata = new List<ReactionData>();
+
     public AudioClip[] voices;
+    
+
+
+
 
     [Serializable]
     private sealed class PinData
@@ -88,6 +96,14 @@ public class GameManager : MonoBehaviour
         public string user_name = "none";
         public ReactionType reactionType = ReactionType.ok;
         public bool spawned = false;
+    }
+
+    [Serializable]
+    public class ReactionSendData
+    {
+        public string pin_uuid = "none";
+        public string user_uuid = "none";
+        public string reaction = "ok";
     }
 
 
@@ -127,7 +143,7 @@ public class GameManager : MonoBehaviour
             var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
             var roomnumber = PlayerPrefs.GetString("Roomnumber", "");
             var url = "http://itoho.ddns.net:5000/arpinpolling";
-            var ur2 = "http://itoho.ddns.net:5000/arreactionpolling";
+            var url2 = "http://itoho.ddns.net:5000/arreactionpolling";
             var data = new PinData();
             data.user_uuid = useruuid;
             data.room_number = roomnumber;
@@ -146,7 +162,7 @@ public class GameManager : MonoBehaviour
 
             // リクエスト送信
             yield return request.SendWebRequest();
-            using var request2 = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST)
+            using var request2 = new UnityWebRequest(url2, UnityWebRequest.kHttpVerbPOST)
             {
                 uploadHandler = new UploadHandlerRaw(postData),
                 downloadHandler = new DownloadHandlerBuffer()
@@ -253,11 +269,12 @@ public class GameManager : MonoBehaviour
                 }
 
 
+                
 
-
-                arr = request2.downloadHandler.text.Split(',');
+                var arr2 = request2.downloadHandler.text.Split(',');
+                Debug.Log(request2.downloadHandler.text);
                 // True or False を judge に格納
-                judge = arr[0];
+                judge = arr2[0];
 
 
                 if (judge == "True")
@@ -268,17 +285,33 @@ public class GameManager : MonoBehaviour
 
 
 
-                    int anchornum = int.Parse(arr[1]);
+                    int anchornum = int.Parse(arr2[1]);
                     Debug.Log("True,response" + anchornum);
                     if (anchornum == 0) continue;
                     //List<Reac> responseanchor = new List<AnchorData>();
                     for (int i = 0; i < anchornum; i++)
                     {
-                        ReactionData tmp = new ReactionData();
-                        tmp.user_name = arr[1 + 1 + i * 3];
-                        tmp.pin_uuid = arr[2 + 1 + i * 3];
-                        tmp.reactionType = (ReactionType)Enum.Parse(typeof(ReactionType), arr[2 + i * 3]);
-                        tmp.spawned = false;
+
+                        var tmp= (ReactionType)Enum.Parse(typeof(ReactionType), arr2[3 + i * 3]);
+                        
+                        switch (tmp)
+                        {
+                            case ReactionType.ok:
+                                Playnumber(56);
+                                break;
+                            case ReactionType.no:
+                                Playnumber(57);
+                                break;
+                            case ReactionType.unable:
+                                Playnumber(58);
+                                break;
+                            case ReactionType.stop:
+                                Playnumber(58);
+                                break;
+                            default:
+                                break;
+                        }
+                        //testdata.Add(tmp);
                         //responseanchor.Add(tmp);
                         //naiteki.Add(tmp);
                         //Debug.Log(tmp.);
@@ -373,6 +406,52 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [Obsolete]
+    public void addreactionfrombutton(string pin_uuid, string pin_type)
+    {
+        StartCoroutine(addreaction(pin_uuid,pin_type));
+        //StartCoroutine("Playnumbersleep");
+    }
+    [System.Obsolete]
+    IEnumerator addreaction(string pin_uuid,string pin_type)
+    {
+
+        var data = new ReactionSendData();
+        var useruuid = PlayerPrefs.GetString("Useruuid", "Useruuid is none");
+        data.user_uuid = useruuid;
+        data.pin_uuid = pin_uuid;
+        data.reaction=pin_type;
+
+        var json = JsonUtility.ToJson(data);
+        Debug.Log(json);
+        var postData = Encoding.UTF8.GetBytes(json);
+
+        using var request = new UnityWebRequest("http://itoho.ddns.net:5000/reactionadd", UnityWebRequest.kHttpVerbPOST)
+        {
+            uploadHandler = new UploadHandlerRaw(postData),
+            downloadHandler = new DownloadHandlerBuffer()
+        };
+
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.timeout = 1;
+
+        // リクエスト送信
+        yield return request.SendWebRequest();
+
+        // レスポンス受信
+        Debug.Log(request.downloadHandler.text);
+        if (request.isNetworkError || request.isHttpError)
+        {
+            Debug.Log(request.error);
+            error_message.text = request.error;
+        }
+        else if (request.responseCode == 200)
+        {
+            
+
+        }
+    }
+
     public void removeallanchor()
     {
         foreach(AnchorData anchor in naiteki)
@@ -461,6 +540,29 @@ public class GameManager : MonoBehaviour
                     
                 }
             }
+        }
+
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 mousePosition = Input.mousePosition;
+
+            Debug.Log(mousePosition);
+            error_message.text = "mouseclick,ok";
+
+            Ray ray = arcamera.ScreenPointToRay(mousePosition);
+
+
+            bool isHit = Physics.Raycast(ray, out RaycastHit hitInfo);
+
+            if (isHit)
+            {
+                error_message.text = "hit,ok";
+                Debug.Log(hitInfo.collider);
+                var button=hitInfo.collider.gameObject.GetComponent<ButtonScript>();
+                button.onClickButton();
+            }
+
         }
 
         //Debug.Log(zerocount);
