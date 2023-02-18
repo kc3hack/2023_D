@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
     public AudioClip kurukuru;
     public Scrollbar slider;
     public List<AnchorData> naiteki= new List<AnchorData>();
+    public AudioClip[] voices;
 
     [Serializable]
     private sealed class PinData
